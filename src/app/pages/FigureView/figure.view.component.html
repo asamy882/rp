@@ -1,0 +1,83 @@
+<ba-card>
+  <form #f="ngForm">
+    <div class="row">
+        <div class="col-lg-6">
+            <label for="Branch">Branch</label>
+            <div class="input-group">
+              <input type="text" (change)="validateForm()" class="form-control" style="color: black!important" id="Branch"
+                name="Branch" ngModel #Branch='ngModel' [(ngModel)]="branch.Name" required placeholder="Select Branch">
+              <app-branches on-selectedRowListener="selectBranch($event)"></app-branches>
+            </div>
+          </div>
+      <div class="col-lg-6">
+          <label for="seasonId">Season</label>
+          <div class="input-group">
+            <input type="text" (change)="validateForm()" class="form-control" style="color: black!important" id="seasonId" name="seasonId"
+              ngModel #seasonId='ngModel' [(ngModel)]="season" required placeholder="Select Branch">
+            <app-periodes on-selectedRowListener="selectSeason($event)"></app-periodes>
+          </div>
+      </div>
+    
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <br />
+        <button type="submit" class="btn btn-primary" [disabled]="!enableButton" (click)="search()">Search</button>
+        <button type="button" *ngIf="viewResult" class="btn btn-primary"  (click)="exportAsXLSX()">Export to Excel</button>
+      </div>
+    </div>
+    <br />
+    <br />
+    <div style="width:100%;overflow:auto;">
+      <table width="100%" class="table table-bordered" *ngIf="viewResult"  id="resulttable">
+        <tr>
+          <td>Month</td>
+          <td *ngFor="let m of months" class="month-th">{{ m }}</td>
+          <td class="total-th">Total</td>
+        </tr>
+        <tr>
+          <td>OS</td>
+          <td *ngFor="let i of rowData">{{ i.OpenStock.toLocaleString('en-us', {maximumfractiondigits: 0}) }}</td>
+          <td> {{ tOS.toLocaleString('en-us', {maximumfractiondigits: 0}) }}</td>
+        </tr>
+
+        <tr>
+          <td>Vol</td>
+          <td *ngFor="let i of rowData">{{ i.Volum.toLocaleString('en-us', {maximumfractiondigits: 0}) }}</td>
+          <td> {{ tVol.toLocaleString('en-us', {maximumfractiondigits: 0}) }}</td>
+        </tr>
+
+        <tr>
+          <td>Val</td>
+          <td *ngFor="let i of rowData">{{ i.Value.toLocaleString('en-us', {maximumfractiondigits: 0}) }}</td>
+          <td> {{ tVal.toLocaleString('en-us', {maximumfractiondigits: 0}) }}</td>
+        </tr>
+
+        <tr>
+          <td>AUP</td>
+          <td *ngFor="let i of rowData">{{ i.AvgUnitPrice.toLocaleString('en-us', {maximumfractiondigits: 2}) }}</td>
+          <td> {{ tAUP.toLocaleString('en-us', {maximumfractiondigits: 2}) }}</td>
+        </tr>
+        <tr>
+          <td>Avg. Dics.</td>
+          <td *ngFor="let i of rowData">{{ i.AvgDiscount.toLocaleString('en-us', {maximumfractiondigits: 2}) }} %</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Month Weight</td>
+          <td *ngFor="let i of rowData">{{ i.MonthWeight.toLocaleString('en-us', {maximumfractiondigits: 2}) }}
+            %</td>
+          <td> {{ tMonthWeight.toLocaleString('en-us', {maximumfractiondigits: 2}) }} %</td>
+        </tr>
+
+        <tr>
+          <td>Sell Thru</td>
+          <td *ngFor="let i of rowData">{{ i.SellThru }} %</td>
+          <td> {{ ((tVol/tOS)*100).toLocaleString('en-us', {maximumfractiondigits: 2}) }} %</td>
+        </tr>
+      </table>
+    </div>
+
+  </form>
+
+</ba-card>

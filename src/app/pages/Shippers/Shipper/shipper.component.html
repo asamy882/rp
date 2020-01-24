@@ -1,0 +1,61 @@
+<p-growl [(value)]="msgs"></p-growl>
+<NgGrid (clickedAdd)="addClicked()" (clickedDelete)="deleteClicked()" (clickedEdit)="editClicked()"
+        [colDefinition]="colDefs" on-rowSelected="rowSelected($event)"
+        [rowData]="shippers"></NgGrid>
+
+
+<p-dialog [(visible)]="display" modal="modal" [closable]="true" [showHeader]="true">
+  <p-header>
+    Add new Factory
+  </p-header>
+  <form #shipperForm="ngForm">
+    <div class="row col-sm-12">
+      <div class="col-sm-6">
+        <label for="inputSuccess1" class="control-label">Factory Code</label>
+        <input type="text" class="form-control" style="color: black!important" [(ngModel)]="shipper.Code" (change)="valiadteForm()"
+               id="inputSuccess1" required
+               name="Code" #code="ngModel">
+      </div>
+      <div class="col-sm-6">
+        <label for="inputSuccess2">Vendor</label>
+        <div class="input-group">
+        <input type="text" class="form-control" style="color: black!important" [(ngModel)]="shipper.Vendor.Name"
+               id="inputSuccess2" required
+               name="Supplier" #supplier="ngModel">
+        <app-vendors on-selectedRowListener="selectVendor($event)"></app-vendors>
+      </div>
+      </div>
+    </div>
+    <div class="row col-sm-12">
+      <div class="col-sm-6">
+        <label for="inputSuccess3">Factory Name</label>
+        <input type="text" [(ngModel)]="shipper.Name" id="inputSuccess3" (change)="valiadteForm()"
+               class="form-control" style="color: black!important" required
+               name="Name" #name="ngModel">
+      </div>
+      <div class="col-sm-6">
+        <label for="inputSuccess4">Description</label>
+        <input type="text" [(ngModel)]="shipper.Description" id="inputSuccess4" (change)="valiadteForm()"
+               class="form-control" style="color: black!important" required
+               name="Description" #description="ngModel">
+      </div>
+    </div>
+    <div class="row col-sm-12">
+      <div class="col-sm-6">
+        <label for="inputSuccess6">Country of Origin</label>
+        <div class="input-group">
+        <input type="text" [(ngModel)]="shipper.Country.Name" id="inputSuccess6"
+               class="form-control" style="color: black!important;" required
+               name="Country" #country="ngModel">
+               <app-countries on-selectedRowListener="selectCountry($event)"></app-countries>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 offset-sm-8">
+        <button type="button" (click)="onSubmit()" class="btn btn-success" [disabled]="!canSubmitShipperForm">Save</button>
+      </div>
+    </div>
+  </form>
+
+</p-dialog>

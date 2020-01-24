@@ -1,0 +1,35 @@
+<form #f="ngForm">
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="seasonId">Season</label>
+          <div class="input-group">
+            <input type="text" (change)="validateForm()" class="form-control" style="color: black!important" id="seasonId" name="seasonId"
+              ngModel #seasonId='ngModel' [(ngModel)]="season" required placeholder="Select Branch">
+            <app-periodes on-selectedRowListener="selectSeason($event)"></app-periodes>
+          </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <br/>
+      <button type="submit" class="btn btn-primary" [disabled]="!enableButton" (click)="search()">Search</button>
+      <button type="submit" class="btn btn-primary" *ngIf="viewResult" (click)="exportData()">Export</button>
+    </div>
+  </div>
+  <br/>
+  <br/>
+  <table width="100%" class="table table-bordered dynamic-tbl" id="exportable">
+    <thead *ngIf="viewResult">
+      <tr>
+        <th class="width150">Gender</th>
+        <th class="width150">Line</th>
+        <th class="width150">Item Name</th>
+        <th class="width150">Desc.</th>
+        <th class="width150 gray-bg">Summer Weight</th>
+        <th class="width150 orange-bg">Winter Weight</th>
+      </tr>
+    </thead>
+    <tbody id="tbody" #tbody>
+
+    </tbody>
+  </table>

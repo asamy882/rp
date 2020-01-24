@@ -1,0 +1,86 @@
+<p-growl [(value)]="msgs"></p-growl>
+<ba-card>
+  <div class="row col-lg-12 col-sm-12">
+    <a [routerLink]="['/pages/definitions/ManageStyleNumber/Upload']" class="btn btn-primary">Upload from Excel</a>
+  </div>
+</ba-card>
+<NgGrid (clickedAdd)="addClicked()" (clickedDelete)="deleteClicked()" (clickedEdit)="editClicked()" [colDefinition]="colDefs"
+  on-rowSelected="rowSelected($event)" [rowData]="styles"></NgGrid>
+
+
+<p-dialog [(visible)]="display" modal="modal" [closable]="true" [showHeader]="true">
+  <p-header>
+    Add new style
+  </p-header>
+  <form #styleForm="ngForm">
+    <div class="row col-sm-12">
+      <div class="col-sm-6">
+        <label for="inputSuccess1" class="control-label">Item Code</label>
+        <input type="text" class="form-control" (change)="valiadteForm()" style="color: black!important" [(ngModel)]="style.StyleNumber"
+          id="inputSuccess1" required name="Code" #code="ngModel">
+      </div>
+      <div class="col-sm-6">
+        <label for="inputSuccess3">Item Name</label>
+        <input type="text" [(ngModel)]="style.ItemName" id="inputSuccess3" (change)="valiadteForm()" class="form-control"
+          style="color: black!important" required name="Name" #name="ngModel">
+      </div>
+    </div>
+    <div class="row col-sm-12">
+      <div class="col-sm-6">
+        <label for="inputSuccess4">Style Number</label>
+        <input type="text" [(ngModel)]="style.ItemCode" id="inputSuccess4" (change)="valiadteForm()" class="form-control"
+          style="color: black!important" required name="inputSuccess4" #inputSuccess4="ngModel">
+      </div>
+      <div class="col-sm-6">
+        <label for="inputItemGroup1">Gender</label>
+        <div class="input-group">
+          <input type="text" [(ngModel)]="style.ItemGroup1.Name" id="inputItemGroup1" class="form-control" style="color: black!important;"
+            required name="inputItemGroup1" #inputItemGroup1="ngModel">
+          <app-gender on-selectedRowListener="selectItemGroup1($event)"></app-gender>
+        </div>
+      </div>
+    </div>
+    <div class="row col-sm-12">
+      <div class="col-sm-6">
+        <label for="inputItemGroup2">Line</label>
+        <div class="input-group">
+          <input type="text" [(ngModel)]="style.ItemGroup2.Name" id="inputItemGroup2" class="form-control" style="color: black!important;"
+            required name="inputItemGroup2" #inputItemGroup2="ngModel">
+          <app-line on-selectedRowListener="selectItemGroup2($event)"></app-line>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <label for="inputItemGroup3">Description</label>
+        <div class="input-group">
+          <input type="text" [(ngModel)]="style.ItemGroup3.Name" id="inputItemGroup3" class="form-control" style="color: black!important;"
+            required name="inputItemGroup3" #inputItemGroup3="ngModel">
+          <app-description on-selectedRowListener="selectItemGroup3($event)"></app-description>
+        </div>
+      </div>
+    </div>
+    <div class="row col-sm-12">
+      <div class="col-sm-6">
+        <label for="inputItemGroup4">Shipment No</label>
+        <div class="input-group">
+          <input type="text" [(ngModel)]="style.ItemGroup4.Name" id="inputItemGroup4" class="form-control" style="color: black!important;"
+            required name="inputItemGroup4" #inputItemGroup4="ngModel">
+          <app-shipmentNo on-selectedRowListener="selectItemGroup4($event)"></app-shipmentNo>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <label for="inputItemGroup5">Seasons</label>
+        <div class="input-group">
+          <input type="text" [(ngModel)]="style.ItemGroup5.Name" id="inputItemGroup5" class="form-control" style="color: black!important;"
+            required name="inputItemGroup5" #inputItemGroup5="ngModel">
+          <app-seasons on-selectedRowListener="selectItemGroup5($event)"></app-seasons>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 offset-sm-8">
+        <button type="button" (click)="onSubmit()" class="btn btn-success" [disabled]="!canSubmitStyleForm">Save</button>
+      </div>
+    </div>
+  </form>
+
+</p-dialog>

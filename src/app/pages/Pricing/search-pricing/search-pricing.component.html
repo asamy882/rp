@@ -1,0 +1,45 @@
+<p-dataTable #dt [value]="pricing" selectionMode="single" [(selection)]="selectedPricing" expandableRows="true" [paginator]="true"
+  [rows]="5" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15,20]">
+  <p-header>
+    <button (click)="filterClicked()" pButton icon="fa-filter"></button>
+  </p-header>
+  <p-column expander="true" styleClass="col-icon" [style]="{'width':'3%'}"></p-column>
+  <p-column field="Costing.CostingName" header="COGS Name" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+  <p-column field="PricingDate" header="Pricing Date" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+  <p-column field="Markup" header="Markup" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+
+  <p-column styleClass="col-button" [style]="{'width':'8%'}">
+    <ng-template pTemplate="header">
+
+    </ng-template>
+    <ng-template let-item="rowData" pTemplate="body">
+      <button type="button" pButton (click)="editPricing(item)" icon="fa-search"></button>
+      <button type="button" pButton (click)="deletePricing(item)" icon="fa-trash"></button>
+    </ng-template>
+  </p-column>
+
+  <ng-template let-pricing pTemplate="rowexpansion">
+    <p-dataTable [value]="pricing.Items" [paginator]="true" rows="20" [responsive]="true">
+      <p-header>
+        <button (click)="filterItemsClicked()" pButton icon="fa-filter"></button>
+      </p-header>
+      <p-column field="InvoiceNo" header="Ship#" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+      <p-column field="StyleNumber" header="ARTICLE" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+      <p-column field="ItemName" header="Item Name" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+      <p-column field="Quantity" header="Quantity" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+      <p-column field="FXPrice" header="FX Price" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+      <p-column field="Total" header="Total" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+      <p-column field="UnitCost" header="Unit Cost" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+      <p-column field="TotalCost" header="Total Cost" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+      <p-column field="UnitPrice" header="Sales Price" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+      <p-column field="Markup" header="Markup" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+
+    </p-dataTable>
+  </ng-template>
+  <p-footer>
+    <div class="ui-helper-clearfix" style="width:100%">
+      <button type="button" pButton icon="fa-plus" style="float:left" (click)="addNewPricing()" label="Add New Pricing" value="Add New Pricing"></button>
+      <button type="button" pButton icon="fa-file-o" iconPos="left" label="Export Data" (click)="dt.exportCSV()" style="float:right"></button>
+    </div>
+  </p-footer>
+</p-dataTable>

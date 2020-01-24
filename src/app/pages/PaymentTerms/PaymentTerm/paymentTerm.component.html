@@ -1,0 +1,44 @@
+<p-growl [(value)]="msgs"></p-growl>
+<NgGrid (clickedAdd)="addClicked()" (clickedDelete)="deleteClicked()" (clickedEdit)="editClicked()"
+        [colDefinition]="colDefs" on-rowSelected="rowSelected($event)"
+        [rowData]="paymentTerms"></NgGrid>
+
+
+<p-dialog [(visible)]="display" modal="modal" [closable]="true" [showHeader]="true">
+  <p-header>
+    Add new payment term
+  </p-header>
+  <form #paymentTermForm="ngForm">
+    <!-- div class="row col-sm-12">
+      <div class="col-sm-12">
+        <label for="inputSuccess1" class="control-label">Term Id</label>
+        <input type="text" class="form-control" (change)="valiadteForm()" style="color: black!important" [(ngModel)]="paymentTerm.TermId"
+               id="inputSuccess1" required
+               name="Code" #code="ngModel">
+      </div>
+    </div -->
+    <div class="row col-sm-12">
+        <div class="col-sm-12">
+            <label for="inputSuccess3">Name</label>
+            <input type="text" [(ngModel)]="paymentTerm.Name" id="inputSuccess3" (change)="valiadteForm()"
+                   class="form-control" style="color: black!important"
+                   name="Name" #name="ngModel" required>
+          </div>
+    </div>
+    <div class="row col-sm-12">
+      <div class="col-sm-12">
+        <label for="inputSuccess4">Description</label>
+        <input type="text" [(ngModel)]="paymentTerm.Description" id="inputSuccess4" (change)="valiadteForm()"
+               class="form-control" style="color: black!important"
+               name="Description" #description="ngModel" required>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-2 offset-sm-8">
+        <button type="button" (click)="onSubmit()" class="btn btn-success" [disabled]="!canSubmitPaymentTermForm">Save</button>
+      </div>
+    </div>
+  </form>
+
+</p-dialog>

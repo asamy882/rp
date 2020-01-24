@@ -1,0 +1,140 @@
+@import 'sass/conf/conf';
+@import 'sass/bootstrap-overrides/overrides';
+@import '~animate.css/animate';
+@import 'sass/typography';
+@import 'sass/buttons';
+@import 'sass/icons';
+@import 'sass/layout';
+@import 'sass/socicon';
+@import 'sass/table';
+@import 'sass/form';
+@import 'sass/treeView';
+@import 'sass/modal';
+@import 'sass/preloader';
+@import 'sass/ionicons';
+@import 'sass/fonts';
+
+.width150{
+    width: 150px;
+  }
+  .scroll-table td {
+    border: none;
+    color: #333;
+    white-space: normal;
+    padding: 5px;
+    line-height: normal;
+  }  
+
+  .scroll-table tr {
+    background: #fff;
+  }  
+.scroll-sticky-col {
+    position: absolute;
+    top: auto;
+    width: 149px;
+    border: none;
+  }
+  .scroll-sticky-col:nth-child(1) {
+    left: 0;
+  }
+  .scroll-sticky-col:nth-child(2) {
+    left: 149px;
+  }
+  .scroll-sticky-col:nth-child(3) {
+    left: 298px;
+  }
+  .scroll-sticky-col:nth-child(4) {
+    left: 446px;
+    width: 195px;
+  }
+  .scroll-tbl ,.scroll-tbl table {
+    border: 1px solid #fff;
+  }
+  .scroll-tit {
+    background: #f7f7f7
+  }
+.scroll-sticky-col-total {
+    position: absolute;
+    top: auto;
+    width: 640px;
+    left: 0;
+    background: #00abff;
+    color:#fff !important;
+    font-weight: bold;
+    border: none;   
+}
+
+.scroll-sticky-col-total-2 {
+  position: absolute;
+  top: auto;
+  width: 640px;
+  left: 0;
+  background: #920606;
+  color:#fff !important;
+  font-weight: bold;
+  border: none;   
+}
+
+.total-td {
+    background: #065072;
+    color:#fff !important;
+    font-weight: bold;   
+}
+.total-td-2 {
+  background: #920606;
+  color:#fff !important;
+  font-weight: bold;   
+}
+
+.scroll-table td ,.scroll-sticky-col {
+  border-bottom: 1px solid #eee !important;
+}
+
+/* any css here will work automatic if you add calss to table  dynamic-tbl*/
+.dynamic-tbl > tbody > tr > td:first-child {
+  text-align: left;
+}
+.dynamic-tbl > tbody > tr > td {
+  border: 1px solid #eee ;
+}
+
+.blue-bg {
+  background: #186ba0 !important;
+  color: #fff !important;
+  min-width: 75px;
+}
+.gray-bg {
+  background: #464a4c !important;
+  color: #fff !important;
+  min-width: 75px;
+}
+.orange-bg {
+  background: #f0ad4e !important;
+  color: #fff !important;
+  min-width: 75px;
+}
+.green-bg {
+  background: #5cb85c !important;
+  color: #fff !important;
+  min-width: 75px;
+}
+.total-th {
+  background: #00abff !important;
+  color:#fff !important;
+  font-weight: bold !important; 
+}
+.h33{
+  height: 33px;
+}
+.width100 {
+  width:100px;
+}
+.right-border{
+  border-right: 1px solid #f0ad4e !important
+}
+.right-border-gray{
+  border-right: 1px solid #464a4c !important
+}
+.right-border-white{
+  border-right: 1px solid #fff !important
+}

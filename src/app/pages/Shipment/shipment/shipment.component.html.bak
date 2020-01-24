@@ -1,0 +1,418 @@
+<p-growl [(value)]="msgs"></p-growl>
+<p-confirmDialog></p-confirmDialog>
+<form #shipmentForm="ngForm">
+  <div class="col-sm-12" style="float: none; margin: 0 auto;">
+    <ba-card cardTitle="Main Information">
+      <div class="row">
+        <div class="col-sm-4  form-group">
+          <label for="txtShipmentNo">Shipment No.</label>
+            <input type="text" disabled="true" class="form-control" style="color: black!important" class="form-control" id="txtShipmentNo"
+              name="txtShipmentNo" ngModel #txtShipmentNo='ngModel' [(ngModel)]="shipment.ShipmentNo">
+        </div>
+        <div class="col-sm-4  form-group">
+          <label for="txtShipmentQTY">Shipping QTY</label>
+            <input type="text" class="form-control" style="color: black!important" disabled="true" id="txtShipmentQTY" name="txtShipmentQTY"
+              [(ngModel)]="shipment.TotalQuantity" ngModel #txtShipmentQTY='ngModel' placeholder="Enter Shipping QTY">
+        </div>
+        <div class="col-sm-4  form-group">
+          <label for="txtShipmentAmount">Shipping Amount</label>
+            <input type="text" class="form-control" style="color: black!important" disabled="true" id="txtShipmentAmount" name="txtShipmentAmount"
+              [(ngModel)]="shipment.TotalAmount" ngModel #txtShipmentAmount='ngModel' placeholder="Enter Shipping Amount">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-4 form-group">
+          <label for="shipmentDate">Shipment Date</label>
+          <div>
+            <input type="date" id="shipmentDate" class="form-control" placeholder=" Enter Shipping Date" ngModel #shipmentDate='ngModel'
+              [(ngModel)]="shipment.ShipmentDate" name="shipmentDate" required>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <label for="season">Season</label>
+          <div class="input-group">
+            <input type="text" style="color: black!important" disabled="true" id="season" name="season" ngModel #season='ngModel' [value]="shipment.Season.Name"
+              placeholder="Select Season">
+            <app-periodes on-selectedRowListener="selectSeason($event)"></app-periodes>
+          </div>
+        </div>
+      </div>
+
+    </ba-card>
+  </div>
+  <p-accordion>
+    <p-accordionTab>
+      <p-header>Freight Process</p-header>
+      <div class="row">
+
+        <div class="col-sm-4">
+          <label for="forwarder">Forwarder</label>
+          <div class="input-group">
+            <input type="text" style="color: black!important" disabled="true" id="forwarder" name="forwarder" ngModel #forwarder='ngModel'
+              [value]="shipment.Forwarder.Name" placeholder="Select Forwarder">
+            <app-forwarders on-selectedRowListener="selectForwarder($event)"></app-forwarders>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <label for="PaymentTerms">Payment Terms</label>
+          <div class="input-group">
+            <input type="text" style="color: black!important" disabled="true" id="PaymentTerms" name="PaymentTerms" ngModel #PaymentTerms='ngModel'
+              [value]="shipment.PaymentTerm.Name" placeholder="Select Payment Terms">
+            <app-paymentTerms on-selectedRowListener="selectPaymentTerms($event)"></app-paymentTerms>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <label for="ShippingTerms">Shipping Terms</label>
+          <div class="input-group">
+            <input type="text" style="color: black!important" disabled="true" id="ShippingTerms" name="ShippingTerms" ngModel #ShippingTerms='ngModel'
+              [value]="shipment.ShippingTerm.Name" placeholder="Select Shipping Terms">
+            <app-paymentTerms on-selectedRowListener="selectShippingTerms($event)"></app-paymentTerms>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <label for="From">From</label>
+          <div class="input-group">
+            <input type="text" style="color: black!important" disabled="true" id="From" name="From" ngModel #From='ngModel' [value]="shipment.ShipmentFrom.Name"
+              placeholder="Select From">
+            <app-shipmentFrom on-selectedRowListener="selectShipmentFrom($event)"></app-shipmentFrom>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <label for="To">To</label>
+          <div class="input-group">
+            <input type="text" style="color: black!important" disabled="true" id="To" name="To" ngModel #To='ngModel' [value]="shipment.ShipmentTo.Name"
+              placeholder="Select To">
+            <app-shipmentTo on-selectedRowListener="selectShipmentTo($event)"></app-shipmentTo>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="storageDays">Storage Days Average</label>
+            <input type="text" class="form-control" style="color: black!important" id="storageDays" placeholder="Storage Days Average"
+              ngModel #storageDays='ngModel' name="storageDays" required [(ngModel)]="shipment.StorageDaysAvg">
+        </div>
+        <div class="col-sm-6">
+          <label for="storageFees">Storage Fees/Rate</label>
+            <input type="text" class="form-control" style="color: black!important" id="storageFees" name="storageFees" [(ngModel)]="shipment.StorageFees"
+              ngModel #storageFees='ngModel' required placeholder="Enter Shipping QTY">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="AgreedShippingDate">Agreed Shipping Date</label>
+            <input type="date" id="AgreedShippingDate" class="form-control" placeholder=" Enter Agreed Shipping Date" ngModel #AgreedShippingDate='ngModel'
+              [(ngModel)]="shipment.AgreedShippingDate" name="AgreedShippingDate">
+        </div>
+        <div class="col-sm-6">
+          <label for="ActualShippingDate">Actual Shipping Date</label>
+            <input type="date" class="form-control" id="ActualShippingDate" name="ActualShippingDate" [(ngModel)]="shipment.ActualShippingDate"
+              ngModel #ActualShippingDate='ngModel' required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="AgreedArrivalDate">Agreed Arrival Date</label>
+            <input type="date" id="AgreedArrivalDate" class="form-control" ngModel #AgreedArrivalDate='ngModel' [(ngModel)]="shipment.AgreedArrivaldDate"
+              name="AgreedArrivalDate">
+        </div>
+        <div class="col-sm-6">
+          <label for="ActualArrivalDate">Actual Arrival Date</label>
+            <input type="date" class="form-control" id="ActualArrivalDate" name="ActualArrivalDate" [(ngModel)]="shipment.ActualArrivaldDate"
+              ngModel #ActualArrivalDate='ngModel' required>
+        </div>
+      </div>
+    </p-accordionTab>
+
+    <p-accordionTab>
+      <p-header>Shipment (bulk) details</p-header>
+      Invoices :
+      <app-invoicesForShipment on-selectedRowListener="selectInvoices($event)"></app-invoicesForShipment>
+
+      <p-dataTable #dt [value]="shipment.ShipmentInvoices" expandableRows="true" [rows]="5" [paginator]="true" [pageLinks]="3"
+        [rowsPerPageOptions]="[5,10,15,20]">
+        <p-header>
+          <button (click)="filterClicked()" class="btn btn-primary">
+            <i class="fa fa-filter"></i>
+          </button>
+        </p-header>
+        <p-column expander="true" styleClass="col-icon" [style]="{'width':'2%'}"></p-column>
+        <p-column field="InvoiceNo" header="Invoice No" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+        <p-column field="InvoiceDate" header="Invoice Date" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+        <p-column field="Shipper.Name" header="Shipper" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+        <p-column field="Priority.Name" header="Priority" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+        <p-column field="Vendor.Name" header="Vendor" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+        <p-column field="OriginCountry.Name" header="Origin Country" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+        <p-column field="TotalQuantity" header="Total Quantity" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+        <p-column field="TotalAmount" header="Total Amount" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+        <p-column field="Status.Name" header="Status" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+        <p-column styleClass="col-button" [style]="{'width':'5%'}">
+          <ng-template pTemplate="header">
+
+          </ng-template>
+          <ng-template let-invoice="rowData" pTemplate="body">
+            <button type="button" class="btn btn-primary" (click)="deleteInvoice(invoice)" icon="fa-trash">
+              <i class="fa fa-trash"></i>
+            </button>
+          </ng-template>
+        </p-column>
+
+        <ng-template let-invoice pTemplate="rowexpansion">
+          <p-tabView>
+            <p-tabPanel header="Header">
+              <div class="ui-grid ui-grid-responsive ui-fluid" style="font-size:16px;padding:20px">
+                <div class="ui-grid-row">
+                  <div class="ui-grid-col-9">
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                      <div class="ui-grid-row">
+                        <div class="ui-grid-col-3 label">Invoice No: </div>
+                        <div class="ui-grid-col-4">{{invoice.InvoiceNo}}</div>
+                        <div class="ui-grid-col-3 label">InvoiceDate: </div>
+                        <div class="ui-grid-col-4">{{invoice.InvoiceDate}}</div>
+                      </div>
+                      <div class="ui-grid-row">
+                        <div class="ui-grid-col-3 label">Shipper: </div>
+                        <div class="ui-grid-col-4">{{invoice.Shipper.Name}}</div>
+                        <div class="ui-grid-col-3 label">Priority: </div>
+                        <div class="ui-grid-col-4">{{invoice.Priority.Name}}</div>
+                      </div>
+                      <div class="ui-grid-row">
+                        <div class="ui-grid-col-3 label">Vendor: </div>
+                        <div class="ui-grid-col-4">{{invoice.Vendor.Name}}</div>
+                        <div class="ui-grid-col-3 label">Origin Country: </div>
+                        <div class="ui-grid-col-4">{{invoice.OriginCountry.Name}}</div>
+                      </div>
+                      <div class="ui-grid-row">
+                        <div class="ui-grid-col-3 label">Port Of Loading: </div>
+                        <div class="ui-grid-col-4">{{invoice.PortofLoading.Name}}</div>
+                        <div class="ui-grid-col-3 label">Final Destination: </div>
+                        <div class="ui-grid-col-4">{{invoice.FinalDestination.Name}}</div>
+                      </div>
+                      <div class="ui-grid-row">
+                        <div class="ui-grid-col-3 label">Payment Term: </div>
+                        <div class="ui-grid-col-4">{{invoice.PaymentTerm.Name}}</div>
+                        <div class="ui-grid-col-3 label">Arrival Date: </div>
+                        <div class="ui-grid-col-4">{{invoice.ArrivalDate}}</div>
+                      </div>
+                      <div class="ui-grid-row">
+                        <div class="ui-grid-col-3 label">Date Of Finanace: </div>
+                        <div class="ui-grid-col-4">{{invoice.DateofFinanace}}</div>
+                        <div class="ui-grid-col-3 label">Payment Status: </div>
+                        <div class="ui-grid-col-4"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </p-tabPanel>
+            <p-tabPanel header="Items">
+              <p-dataTable [value]="invoice.Items" expandableRows="true" [paginator]="true" [rows]="5" [paginator]="true" [pageLinks]="3"
+                [rowsPerPageOptions]="[5,10,15,20]">
+                <p-header>
+                  <button (click)="filterItemsClicked()" class="btn btn-primary">
+                    <i class="fa fa-filter"></i>
+                  </button>
+                </p-header>
+                <p-column expander="true" styleClass="col-icon"></p-column>
+                <p-column field="OrderNo" header="PO Number" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+                <p-column field="StyleNumber" header="Style Number" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+                <p-column field="ItemName" header="Item Name" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+                <p-column field="Quantity" header="Total Quantity" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+                <p-column field="FXPrice" header="Unit Price" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+                <p-column field="FXAmount" header="FX Amount" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+                <p-column field="Currency.CurrencyName" header="Currency" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+                <ng-template let-item pTemplate="rowexpansion">
+                  <div class="ui-grid ui-grid-responsive ui-fluid" style="font-size:16px;padding:20px">
+                    <div class="ui-grid-row">
+                      <div class="ui-grid-col-9">
+                        <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                          <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 label">PO Number: </div>
+                            <div class="ui-grid-col-4">{{item.OrderNo}}</div>
+                            <div class="ui-grid-col-2 label">Style Number: </div>
+                            <div class="ui-grid-col-4">{{item.StyleNumber}}</div>
+                          </div>
+                          <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 label">Item Name: </div>
+                            <div class="ui-grid-col-4">{{item.ItemName}}</div>
+                            <div class="ui-grid-col-2 label">Total Quantity: </div>
+                            <div class="ui-grid-col-4">{{item.Quantity}}</div>
+                          </div>
+                          <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 label">Unit Price: </div>
+                            <div class="ui-grid-col-4">{{item.FXPrice}}</div>
+                            <div class="ui-grid-col-2 label">Total Amount: </div>
+                            <div class="ui-grid-col-4">{{item.FXAmount}}</div>
+                          </div>
+                          <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 label">Currency: </div>
+                            <div class="ui-grid-col-4">{{item.Currency.CurrencyName}}</div>
+                            <div class="ui-grid-col-2 label">HTS Number: </div>
+                            <div class="ui-grid-col-4">{{item.HTSNumber}}</div>
+                          </div>
+                          <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 label">Number Of Cartons: </div>
+                            <div class="ui-grid-col-4">{{item.NumberOfCartons}}</div>
+                            <div class="ui-grid-col-2 label">CBM: </div>
+                            <div class="ui-grid-col-4">{{item.CBM}}</div>
+                          </div>
+                          <div class="ui-grid-row">
+                            <div class="ui-grid-col-2 label">GW: </div>
+                            <div class="ui-grid-col-4">{{item.GW}}</div>
+                            <div class="ui-grid-col-2 label">NW: </div>
+                            <div class="ui-grid-col-4">{{item.NW}}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-dataTable>
+            </p-tabPanel>
+            <p-tabPanel header="Total">
+              <div class="ui-grid ui-grid-responsive ui-fluid" style="font-size:16px;padding:20px">
+                <div class="ui-grid-row">
+                  <div class="ui-grid-col-9">
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                      <div class="ui-grid-row">
+                        <div class="ui-grid-col-2 label">Total Quantity: </div>
+                        <div class="ui-grid-col-10">{{invoice.TotalQuantity}}</div>
+                      </div>
+                      <div class="ui-grid-row">
+                        <div class="ui-grid-col-2 label">Total Amount: </div>
+                        <div class="ui-grid-col-10">{{invoice.TotalAmount}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </p-tabPanel>
+          </p-tabView>
+        </ng-template>
+        <p-footer>
+          <div class="ui-helper-clearfix" style="width:100%">
+            <button type="button" pButton icon="fa-file-o" iconPos="left" label="Export Data" (click)="dt.exportCSV()" style="float:right"></button>
+          </div>
+        </p-footer>
+      </p-dataTable>
+
+
+    </p-accordionTab>
+
+    <p-accordionTab>
+      <p-header>Clearance Agency Record</p-header>
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="PortOfLoading">Port Of Loading</label>
+          <div class="input-group">
+            <input type="text" class="form-control" style="color: black!important" ngModel #PortOfLoading='ngModel' id="PortOfLoading"
+              placeholder="Slect Port Of Loading" name="PortOfLoading" disabled="true" [(ngModel)]="shipment.PortofLoading.Name">
+            <app-portofLoadings on-selectedRowListener="selectPortofLoadings($event)"></app-portofLoadings>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label for="PortOfDischarge">Port Of Discharge</label>
+          <div class="input-group">
+            <input type="text" class="form-control" style="color: black!important" id="PortOfDischarge" name="PortOfDischarge" [(ngModel)]="shipment.PortOfDischarge.Name"
+              ngModel #PortOfDischarge='ngModel' disabled="true" placeholder="Select Port Of Discharge">
+            <app-finalDestinations on-selectedRowListener="selectFinalDestinations($event)"></app-finalDestinations>
+
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="AgreedWHDate">Agreed WH Date</label>
+          <div class="input-group">
+            <input type="date" id="AgreedWHDate" class="form-control" ngModel #AgreedWHDate='ngModel' [(ngModel)]="shipment.AgreedWHDate"
+              name="AgreedWHDate">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <label for="ActualWHDate">Actual WH Date</label>
+          <div class="input-group">
+            <input type="date" class="form-control" id="ActualWHDate" name="ActualWHDate" [(ngModel)]="shipment.ActualWHDate" ngModel
+              #ActualWHDate='ngModel' required>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <label for="ClearanceAgency">Clearance Agency</label>
+          <div class="input-group">
+            <input type="text" class="form-control" style="color: black!important" id="ClearanceAgency" name="ClearanceAgency" [(ngModel)]="shipment.Clearance.Name"
+              ngModel #ClearanceAgency='ngModel' disabled="true" placeholder="Select Clearance Agency">
+            <app-clearances on-selectedRowListener="selectClearanceAgency($event)"></app-clearances>
+          </div>
+        </div>
+      </div>
+
+    </p-accordionTab>
+
+    <p-accordionTab>
+      <p-header>Expenses</p-header>
+      <NgGrid (clickedAdd)="preAddExpense()" (clickedDelete)="deleteExpense()" (clickedEdit)="preUpdateExpense()" [colDefinition]="colDefs"
+        [rowData]="shipment.ShipmentExpenses" on-rowSelected="expenseSelected($event)"></NgGrid>
+    </p-accordionTab>
+  </p-accordion>
+  <br/>
+  <br/>
+  <div class="row">
+    <div class="col-sm-2 offset-sm-8">
+      <button type="button" class="btn btn-success" (click)="onSubmit()" [disabled]="!canSubmitOrderForm">Save</button>
+    </div>
+  </div>
+</form>
+
+
+<p-dialog [(visible)]="display" modal="modal" [closable]="true" [showHeader]="true">
+  <p-header>
+    Add Shipment Expenses
+  </p-header>
+  <form #ShipmentExpenseForm="ngForm">
+    <div>
+      <div class="col-sm-12">
+        <label for="ExpenseName">Expense Name</label>
+        <div class="input-group">
+          <input type="text" disabled="true" class="form-control" style="color: black!important" id="ExpenseName" name="ExpenseName"
+            [(ngModel)]="expense.Expense.Name" ngModel #ExpenseName='ngModel' placeholder="Select Expense">
+          <app-expenses on-selectedRowListener="selectExpense($event)"></app-expenses>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <label for="Currency">Currency</label>
+        <div class="input-group">
+          <input type="text" class="form-control" style="color: black!important" id="Currency" name="Currency" [(ngModel)]="expense.Currency.CurrencyName"
+            ngModel #Currency='ngModel' disabled="true" placeholder="Select Currency">
+          <app-currencies on-selectedRowListener="selectCurrency($event)"></app-currencies>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <label for="txtAgreed">Agreed Amount</label>
+        <div class="input-group">
+          <input type="number" (change)="validateExpenseForm()" class="form-control" style="color: black!important" id="txtAgreed"
+            name="txtAgreed" ngModel #txtAgreed='ngModel' [(ngModel)]="expense.AgrredAmount" required>
+
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <label for="txtActual">Actual Amount</label>
+        <div class="input-group">
+          <input type="number" (change)="validateExpenseForm()" class="form-control" style="color: black!important" id="txtActual"
+            name="txtActual" [(ngModel)]="expense.ActualAmount" ngModel #txtActual='ngModel' required placeholder="Enter Actual Amount">
+
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 offset-sm-8">
+        <button type="button" class="btn btn-success" (click)="onSubmitExpense()" [disabled]="!canSubmitExpenseForm">Save</button>
+      </div>
+    </div>
+
+  </form>
+
+</p-dialog>

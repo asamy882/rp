@@ -1,0 +1,74 @@
+<form #f="ngForm">
+  <p-growl [(value)]="msgs"></p-growl>
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="seasonId">Season</label>
+      <div class="input-group">
+        <input type="text" class="form-control" style="color: black!important" id="seasonId" name="seasonId" ngModel
+          #seasonId='ngModel' [(ngModel)]="season.Name" required placeholder="Select Branch">
+        <app-periodes on-selectedRowListener="selectSeason($event)"></app-periodes>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+
+      <button type="submit" *ngIf="!viewMode" class="btn btn-primary" [disabled]="!enableGet" (click)="getOTB()">Get
+        OTB</button>
+      <button type="submit" *ngIf="!viewMode" class="btn btn-primary" [disabled]="!enableSave" (click)="onSubmit()">Submit
+        OTB</button>
+        <button type="button" *ngIf="viewResult" class="btn btn-primary"  (click)="exportAsXLSX()">Export to Excel</button>
+     
+      <NgWorkflow *ngIf="viewMode" [taskId]="taskId"></NgWorkflow>
+    </div>
+  </div>
+  <br />
+  <div style="width:100%;overflow:auto;">
+    <table id="resulttable" width="100%" class="table table-bordered dynamic-tbl" *ngIf="viewResult">
+      <thead>
+        <tr>
+          <th class="width150">Gender</th>
+          <th class="width150">Line</th>
+          <th class="width150">Item Name</th>
+          <th class="width150">Desc.</th>
+          <th class="width150">FX Price</th>
+          <th class="width150">AVG. Weight</th>
+          <th class="width150"> OTB</th>
+          <th class="width150"> Value</th>
+        </tr>
+      </thead>
+      <tbody id="tbody" #tbody>
+
+        <ng-container *ngFor="let gender of otb.Items;let genderIndex=index">
+          <ng-container *ngFor="let description of gender.Childs;let descriptionIndex=index">
+            <tr>
+              <td class="width150">{{gender.Name}}</td>
+              <td class="width150">{{description.Group2Name}}</td>
+              <td class="width150">{{description.ItemName}}</td>
+              <td class="width150">{{description.Name}}</td>
+              <td class="width150">{{description.AUP| number}}</td>
+              <td class="width150">{{description.AVGWeight| number}}%</td>
+              <td class="width150">
+                <input type="text" id="otb{{description.Id }}" name="otb{{ description.Id }}" class="width100"
+                  [(ngModel)]="description.OTB" (change)="otbAmountChanged(genderIndex)">
+                  <span style="display: none">{{description.OTB | number}}</span>
+              </td>
+              <td class="width150">{{description.OTB*description.AUP | number}}</td>
+            </tr>
+          </ng-container>
+          <tr>
+            <td colspan='4' class='total-td'>Total {{ gender.Name }}</td>
+            <td class='total-td'></td>
+            <td class='total-td'>{{ gender.AVGWeight| number }}%</td>
+            <td class='total-td'>{{gender.OTB| number}}</td>
+            <td class='total-td'>{{gender.Value| number}}</td>
+          </tr>
+        </ng-container>
+        <tr>
+          <td colspan='6' class='total-td'>Total</td>
+          <td class='total-td'>{{totalOTB| number}}</td>
+          <td class='total-td'>{{totalValue| number}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

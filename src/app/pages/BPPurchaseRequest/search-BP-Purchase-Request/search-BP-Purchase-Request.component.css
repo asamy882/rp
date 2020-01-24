@@ -1,0 +1,20 @@
+#grid .ui-datatable-reflow .ui-datatable-data td .ui-column-title {
+  display: inline-block !important;
+  }
+
+  #grid .ui-datatable .ui-datatable-header {
+    padding: .75em .75em !important;
+  }
+
+  .ui-datatable .ui-datatable-header {
+    padding: .75em .75em !important;
+  }
+
+
+  #grid .ui-datatable-header .ui-widget-header {
+    padding: .75em .75em !important;
+  }
+
+  .ui-datatable-header .ui-widget-header {
+    padding: .75em .75em !important;
+  }

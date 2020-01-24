@@ -1,0 +1,301 @@
+<p-growl [(value)]="msgs"></p-growl>
+<p-confirmDialog></p-confirmDialog>
+<form #orderf="ngForm">
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="txtPerOrderNo">Purchase Request No</label>
+      <div class="input-group">
+        <input type="text" disabled="true" class="form-control" style="color: black!important" class="form-control" id="txtPerOrderNo"
+          name="txtPerOrderNo" ngModel #txtPerOrderNo='ngModel' [(ngModel)]="order.PreOrderNo" required placeholder="Select Pre Order">
+        <app-prePurchaseOrders on-selectedRowListener="selectPerOrder($event)"></app-prePurchaseOrders>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <label for="txtOrderNo">PO Number</label>
+      <input type="text" class="form-control" style="color: black!important" class="form-control" id="txtOrderNo" name="txtOrderNo"
+        [(ngModel)]="order.OrderNo" ngModel #txtOrderNo='ngModel' required placeholder="Enter Pre Order No">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="orderDate">Order Date</label>
+      <input type="date" class="form-control" (change)="validateOrderForm()" [(ngModel)]="order.OrderDate" id="orderDate" name="orderDate"
+        ngModel #orderDate='ngModel' required>
+    </div>
+
+  </div>
+  <br/>
+  <p-dataTable #dt [value]="order.Items" expandableRows="true" [paginator]="true" [rows]="5" [paginator]="true" [pageLinks]="3"
+    [rowsPerPageOptions]="[5,10,15,20]" [responsive]="true" [headerCheckboxToggleAllPages]="true" [(selection)]="selectedItems">
+    <p-header>
+      <button (click)="filterClicked()" pButton icon="fa-filter"></button>
+    </p-header>
+    <p-column [style]="{'width':'38px'}" selectionMode="multiple"></p-column>
+    <p-column expander="true" styleClass="col-icon" [style]="{'width':'3%'}"></p-column>
+    <p-column field="StyleDefinition.StyleNumber" header="Item Code" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+    <p-column field="StyleDefinition.ItemCode" header="Item Code" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+    <p-column field="StyleDefinition.ItemName" header="Item Name" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+    <p-column field="Color.Name" header="Color" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+    <p-column field="Size.Name" header="Size" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+    <p-column field="Barcode" header="Barcode" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+    <p-column field="Quantity" header="QTY" [style]="{'width':'10%'}" [sortable]="true" [style]="{'width':'10%'}" [filter]="isFilter"
+      filterMatchMode="contains"></p-column>
+    <p-column field="FXPrice" header="Unit Price" [style]="{'width':'10%'}" [sortable]="true" [style]="{'width':'10%'}" [filter]="isFilter"
+      filterMatchMode="contains"></p-column>
+    <p-column field="FXAmount" header="FX Amount" [style]="{'width':'12%'}" [sortable]="true" [style]="{'width':'12%'}" [filter]="isFilter"
+      filterMatchMode="contains"></p-column>
+    <p-column field="Currency.CurrencyName" [style]="{'width':'10%'}" header="Currency" [sortable]="isFilter" [filter]="isFilter"
+      filterMatchMode="contains"></p-column>
+    <p-column styleClass="col-button" [style]="{'width':'8%'}">
+      <ng-template pTemplate="header">
+
+      </ng-template>
+      <ng-template let-item="rowData" pTemplate="body">
+        <button type="button" pButton (click)="preUpdateItem(item)" icon="fa-edit"></button>
+        <button type="button" pButton (click)="deleteItem(item)" icon="fa-trash"></button>
+      </ng-template>
+    </p-column>
+    <ng-template let-item pTemplate="rowexpansion">
+      <div class="ui-grid ui-grid-responsive ui-fluid" style="font-size:16px;padding:20px">
+        <div class="ui-grid-row">
+          <div class="ui-grid-col-9">
+            <div class="ui-grid ui-grid-responsive ui-grid-pad">
+              <div class="ui-grid-row">
+                <div class="ui-grid-col-4 label">Item Code: </div>
+                <div class="ui-grid-col-4">{{item.StyleDefinition.ItemCode}}</div>
+                <div class="ui-grid-col-4 label">Item Name: </div>
+                <div class="ui-grid-col-4">{{item.StyleDefinition.ItemName}}</div>
+              </div>
+              <div class="ui-grid-row">
+                <div class="ui-grid-col-4 label">Vendor: </div>
+                <div class="ui-grid-col-4">{{item.Vendor.Name}}</div>
+                <div class="ui-grid-col-4 label">COO: </div>
+                <div class="ui-grid-col-4">{{item.COO.Name}}</div>
+              </div>
+              <div class="ui-grid-row">
+                <div class="ui-grid-col-4 label">Gender: </div>
+                <div class="ui-grid-col-4">{{item.StyleDefinition.ItemGroup1.Name}}</div>
+                <div class="ui-grid-col-4 label">Item Code: </div>
+                <div class="ui-grid-col-4">{{item.StyleDefinition.StyleNumber}}</div>
+              </div>
+              <div class="ui-grid-row">
+                <div class="ui-grid-col-4 label">Description: </div>
+                <div class="ui-grid-col-4">{{item.StyleDefinition.ItemGroup3.Name}}</div>
+                <div class="ui-grid-col-4 label">Line: </div>
+                <div class="ui-grid-col-4">{{item.StyleDefinition.ItemGroup2.Name}}</div>
+              </div>
+              <div class="ui-grid-row">
+                <div class="ui-grid-col-4 label">Shipment No: </div>
+                <div class="ui-grid-col-4">{{item.StyleDefinition.ItemGroup4.Name}}</div>
+                <div class="ui-grid-col-4 label">Season: </div>
+                <div class="ui-grid-col-4">{{item.StyleDefinition.ItemGroup5.Name}}</div>
+              </div>
+              <div class="ui-grid-row">
+                <div class="ui-grid-col-4 label">Color: </div>
+                <div class="ui-grid-col-4">{{item.Color.Code}} - {{item.Color.Name}}</div>
+                <div class="ui-grid-col-4 label">QTY: </div>
+                <div class="ui-grid-col-4">{{item.Quantity}}</div>
+              </div>
+              <div class="ui-grid-row">
+                <div class="ui-grid-col-4 label">Size: </div>
+                <div class="ui-grid-col-4">{{item.Size.Code}} - {{item.Size.Name}}</div>
+                <div class="ui-grid-col-4 label">Unit Price: </div>
+                <div class="ui-grid-col-4">{{item.FXPrice.toLocaleString('en-us', {minimumFractionDigits: 2})}}</div>
+              </div>
+              <div class="ui-grid-row">
+                <div class="ui-grid-col-4 label">Currency: </div>
+                <div class="ui-grid-col-4">{{item.Currency.CurrencyName}}</div>
+                <div class="ui-grid-col-4 label">FX Amount: </div>
+                <div class="ui-grid-col-4">{{item.FXAmount.toLocaleString('en-us', {minimumFractionDigits: 2})}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <p-footer *ngIf="!viewMode">
+      <div class="ui-helper-clearfix" style="width:100%">
+        <button type="button" pButton icon="fa-plus" style="float:left" (click)="preAddItem()" label="Add New Item" value="Add New Item"></button>
+        <csv (csvRecordsListener)="addItemsFromCsvFile($event)"></csv>
+        <button type="button" pButton icon="fa-trash" style="float:right" (click)="deleteSelected()" label="Delete Selected" value="Delete Selected"></button>
+        <button type="button" pButton icon="fa-file-o" iconPos="left" label="Export Data" (click)="dt.exportCSV()" style="float:right"></button>
+      </div>
+    </p-footer>
+  </p-dataTable>
+  <div class="row" *ngIf="!viewMode">
+    <div class="col-lg-6">
+      <br/>
+      <button type="button" class="btn btn-success" [disabled]="!canSubmitOrderForm" (click)="onSubmit()">Save</button>
+    </div>
+  </div>
+  <NgWorkflow *ngIf="viewMode" [taskId]="taskId" [nextPage]="nextPage"></NgWorkflow>
+</form>
+
+<!-- p-accordion *ngIf="!viewMode">
+  <p-accordionTab>
+    <p-header>Bulk</p-header>
+    <csv (csvRecordsListener)="addOrdersFromCsvFile($event)"></csv>
+    </p-accordionTab>
+</p-accordion -->
+
+<p-dialog [modal]="_modal" [(visible)]="_display" [width]="_width" [responsive]="true">
+
+  <p-header>Add or edit item</p-header>
+  <form #itemf="ngForm">
+
+    <div class="row">
+      <div class="col-lg-6">
+        <label for="txtStyleNumber">Item Code</label>
+        <div class="input-group">
+          <input type="text" (change)="validateItemForm()" class="form-control" style="color: black!important" id="txtStyleNumber"
+            name="txtStyleNumber" ngModel #txtStyleNumber='ngModel' [(ngModel)]="item.StyleDefinition.StyleNumber" required
+            placeholder="Select Item Code">
+          <app-styles on-selectedRowListener="selectStyle($event)"></app-styles>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <label for="txtCOO">COO</label>
+        <div class="input-group">
+          <input type="text" class="form-control" (change)="validateItemForm()" style="color: black!important" id="txtCOO" name="txtCOO"
+            ngModel #txtCOO='ngModel' [(ngModel)]="item.COO.Name" required placeholder="Enter COO" disabled>
+          <app-coo on-selectedRowListener="selectCOO($event)"></app-coo>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <label for="txtItemCode">Item Code</label>
+        <input type="text" class="form-control" (change)="validateItemForm()" style="color: black!important" id="txtItemCode" name="txtItemCode"
+          ngModel #txtItemCode='ngModel' [(ngModel)]="item.StyleDefinition.ItemCode" required placeholder="Enter Item Code"
+          disabled>
+      </div>
+      <div class="col-lg-6">
+        <label for="txtItemName">Item Name</label>
+        <input type="text" class="form-control" (change)="validateItemForm()" style="color: black!important" id="txtItemName" name="txtItemName"
+          ngModel #txtItemName='ngModel' [(ngModel)]="item.StyleDefinition.ItemName" required placeholder="Enter Item Name"
+          disabled>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <label for="txtVendor">Vendor</label>
+        <div class="input-group">
+          <input type="text" class="form-control" style="color: black!important" disabled="true" id="txtVendor" name="txtVendor" ngModel
+            #txtVendor='ngModel' [(ngModel)]="item.Vendor.Name" placeholder="Select Vendor">
+          <app-vendors on-selectedRowListener="selectVendor($event)"></app-vendors>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <label for="txtItemGroup1">Gender</label>
+        <div class="input-group">
+          <input type="text" class="form-control" style="color: black!important" disabled="true" id="txtItemGroup1" name="txtItemGroup1"
+            ngModel #txtItemGroup1='ngModel' [(ngModel)]="item.StyleDefinition.ItemGroup1.Name" placeholder="Select Gender">
+          <!-- app-gender on-selectedRowListener="selectItemGroup1($event)"></app-gender -->
+        </div>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <label for="txtItemGroup2">Line</label>
+        <div class="input-group">
+          <input type="text" class="form-control" style="color: black!important" disabled="true" id="txtItemGroup2" name="txtItemGroup2"
+            ngModel #txtItemGroup2='ngModel' [(ngModel)]="item.StyleDefinition.ItemGroup2.Name" placeholder="Select Line">
+          <!-- app-line on-selectedRowListener="selectItemGroup2($event)"></app-line -->
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <label for="txtItemGroup3">Description</label>
+        <div class="input-group">
+          <input type="text" class="form-control" style="color: black!important" disabled="true" id="txtItemGroup3" name="txtItemGroup3"
+            ngModel #txtItemGroup3='ngModel' [(ngModel)]="item.StyleDefinition.ItemGroup3.Name" placeholder="Select Description">
+          <!-- app-description on-selectedRowListener="selectItemGroup3($event)"></app-description -->
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <label for="txtItemGroup4">Shipment No</label>
+        <div class="input-group">
+          <input type="text" class="form-control" style="color: black!important" disabled="true" id="txtItemGroup4" name="txtItemGroup4"
+            ngModel #txtItemGroup4='ngModel' [(ngModel)]="item.StyleDefinition.ItemGroup4.Name" placeholder="Select Shipment No">
+          <!-- app-shipmentNo on-selectedRowListener="selectItemGroup4($event)"></app-shipmentNo -->
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <label for="txtItemGroup5">Season</label>
+        <div class="input-group">
+          <input type="text" class="form-control" style="color: black!important" disabled="true" id="txtItemGroup5" name="txtItemGroup5"
+            ngModel #txtItemGroup5='ngModel' [(ngModel)]="item.StyleDefinition.ItemGroup5.Name" placeholder="Select Season">
+          <!-- app-seasons on-selectedRowListener="selectItemGroup5($event)"></app-seasons -->
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <label for="txtColorCode">Color</label>
+        <div class="input-group">
+          <input type="text" class="form-control" style="color: black!important" disabled="true" id="txtColorCode" name="txtColorCode"
+            ngModel #txtColorCode='ngModel' [value]="item.ColorStr" placeholder="Select Color">
+          <app-colors on-selectedRowListener="selectColor($event)"></app-colors>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <label for="txtSizeCode">Size</label>
+        <div class="input-group">
+          <input type="text" class="form-control" style="color: black!important" disabled="true" id="txtSizeCode" name="txtSizeCode"
+            ngModel #txtSizeCode='ngModel' [value]="item.SizeStr" placeholder="Select Size">
+          <app-size on-selectedRowListener="selectSize($event)"></app-size>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <label for="txtUnitPrice">Unit Price</label>
+        <input type="text" (change)="calculateAmount()" class="form-control" style="color: black!important" id="txtUnitPrice" name="txtUnitPrice"
+          ngModel #txtUnitPrice='ngModel' [(ngModel)]="item.FXPrice" required placeholder="Enter Unit Price">
+      </div>
+      <div class="col-lg-6">
+        <label for="txtQTY">QTY</label>
+        <input type="text" (change)="calculateAmount()" class="form-control" style="color: black!important" id="txtQTY" name="txtQTY"
+          ngModel #txtQTY='ngModel' [(ngModel)]="item.Quantity" required placeholder="Enter QTY">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <label for="txtCurrencyName">Currency</label>
+        <div class="input-group">
+          <input type="text" class="form-control" style="color: black!important" disabled="true" id="txtCurrencyName" name="txtCurrencyName"
+            ngModel #txtCurrencyName='ngModel' [value]="item.Currency.CurrencyName" placeholder="Select Currency">
+          <app-currencies on-selectedRowListener="selectCurrency($event)"></app-currencies>
+
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <label for="txtFXPrice">FX Amount</label>
+        <input type="text" class="form-control" disabled="true" style="color: black!important" id="txtFXPrice" name="txtFXPrice"
+          ngModel #txtFXPrice='ngModel' [(ngModel)]="item.FXAmount">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <label for="txtBarcode">Barcode</label>
+        <input type="text" (change)="validateItemForm()" class="form-control" style="color: black!important" id="txtBarcode" name="txtBarcode"
+          ngModel #txtBarcode='ngModel' [(ngModel)]="item.Barcode" required placeholder="Enter Barcode">
+      </div>
+    </div>
+
+    <p-footer>
+      <button type="button" [disabled]="!canSubmitItemForm" class="btn btn-success" (click)="onSubmitItem()">Save</button>
+      <button type="button" (click)="onCancel()" class="btn btn-second">Cancel</button>
+    </p-footer>
+
+  </form>
+</p-dialog>
+
+<!--div class="form-group col-md-12 ">
+    <button type="submit" [disabled]="!f.valid" class="btn btn-primary">Save</button>
+    <button type="button" (click)="onCancel()" class="btn btn-second">Cancel</button>
+
+  </div-->

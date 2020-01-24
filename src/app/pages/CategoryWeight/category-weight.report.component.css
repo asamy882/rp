@@ -1,0 +1,126 @@
+.input-group-addon, .input-group-btn, .input-group .form-control {
+	display : -webkit-box;
+ }
+
+ table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 0px;
+  text-align: left;
+}
+
+.non-border{
+border:none;
+}
+
+.with-border{
+  border-bottom:1px solid black;
+  }
+
+
+.width150{
+  width: 150px;
+}
+
+.width450{
+  width: 450px;
+}
+
+.width600{
+  width: 600px;
+}
+
+.width750{
+  width: 750px;
+}
+
+.width900{
+  width: 900px;
+}
+
+
+
+
+.table {
+  background: #fff;
+  color: #333;
+}
+
+.table-bordered {
+  border: 1px solid #EBEBEB;
+}
+
+.table-bordered > thead > tr > th,
+.table-bordered > thead > tr > td {
+  background-color: #F5F5F6;
+  border-bottom-width: 1px;
+}
+
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+  border: 1px solid #e7e7e7 !important;
+
+}
+.table > thead > tr > th {
+  border-bottom: 1px solid #DDDDDD;
+  vertical-align: bottom;
+}
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+  border-top: 1px solid #e7eaec;
+  line-height: 1.42857;
+  padding: 8px;
+  vertical-align: middle;
+  text-align: left !important;
+}
+
+.table > tbody > tr > td:first-child {
+  background: #f7f7f7;
+  text-align: left !important;
+  color: #333;
+  font-weight: bold;
+}
+
+
+.month-th {
+  background: #eee;
+  color: #000;
+  font-weight: bold;
+}
+
+.total-th {
+  background: #00abff;
+  color: #fff;
+  font-weight: bold; 
+}
+
+.table td{
+  text-align: left !important;
+}
+
+.blue-bg {
+  background: #186ba0 !important;
+  color: #fff !important;
+}
+.gray-bg {
+  background: #464a4c !important;
+  color: #fff !important;
+}
+.orange-bg {
+  background: #f0ad4e !important;
+  color: #fff !important;
+}
+.green-bg {
+  background: #5cb85c !important;
+  color: #fff !important;
+}

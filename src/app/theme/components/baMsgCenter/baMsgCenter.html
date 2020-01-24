@@ -1,0 +1,87 @@
+<ul class="al-msg-center clearfix">
+  <li class="dropdown">
+    <a href class="dropdown-toggle" id="msg-dd1" data-toggle="dropdown" aria-expanded="false">
+      <i class="fa fa-bell-o"></i><span>{{ notifications.length }}</span>
+
+      <div class="notification-ring"></div>
+    </a>
+
+    <div class="top-dropdown-menu dropdown-menu" aria-labelledby="msg-dd1">
+      <i class="dropdown-arr"></i>
+
+      <div class="header clearfix">
+        <strong>Taskes</strong>
+        <!-- a href>Mark All as Read</a>
+        <a href>Settings</a -->
+      </div>
+      <div class="msg-list">
+
+          <!--p-dataScroller [value]="notifications" [rows]="10">
+              <ng-template let-msg pTemplate="item" let-i="index">
+                  <div class="ui-g car-item">
+                      <div class="ui-g-12 ui-md-9">
+                          <div class="ui-g-12 ui-md-3">
+                              <i class="fa fa-search" (click)="selectNotification(msg)" style="cursor:pointer"></i>
+                          </div>
+                          <div class="ui-g">
+
+                              <div class="ui-g-10 ui-sm-6">{{ msg.TaskTitle }}</div>
+                              <div class="ui-g-10 ui-sm-6">{{ msg.TaskDate }}</div>
+                              <div class="ui-g-10 ui-sm-6">{{ msg.Comments }}</div>
+
+                          </div>
+                      </div>
+
+                  </div>
+              </ng-template>
+          </p-dataScroller-->
+
+          <!-- div class="ui-g" *ngFor="let msg of notifications">
+              <div class="ui-g-12 ui-md-12">
+                  <div class="ui-g-12 ui-md-3">
+                      <i class="fa fa-search" (click)="selectNotification(msg)" style="cursor:pointer"></i>
+                  </div>
+                  <div class="ui-g">
+                      <div class="ui-g-10 ui-sm-9">{{ msg.TaskTitle }}</div>
+                      <div class="ui-g-10 ui-sm-9">{{ msg.TaskDate }}</div>
+                  </div>
+              </div>
+            </div -->
+
+
+        <a  *ngFor="let msg of notifications"  (click)="selectNotification(msg)" class="clearfix" >
+          <div>
+            <div>{{ msg.TaskTitle }}</div>
+            <div>{{ msg.TaskDate }} - {{ msg.Comments }}</div>
+          </div>
+        </a>
+      </div>
+      <!--  a href>See all notifications</a  -->
+    </div>
+  </li>
+  <!--li class="dropdown">
+    <a href class="msg dropdown-toggle" id="msg-dd2" data-toggle="dropdown" aria-expanded="false">
+      <i class="fa fa-envelope-o"></i><span>{{ messages.length }}</span>
+      <div class="notification-ring"></div>
+    </a>
+    <div class="top-dropdown-menu dropdown-menu" aria-labelledby="msg-dd2">
+      <i class="dropdown-arr"></i>
+      <div class="header clearfix">
+        <strong>Messages</strong>
+        <a href>Mark All as Read</a>
+        <a href>Settings</a>
+      </div>
+      <div class="msg-list">
+        <a *ngFor="let msg of messages" href class="clearfix">
+          <div class="img-area"><img [ngClass]="{'photo-msg-item': !msg.image}"
+                                     src="{{ ( msg.image ||  (msg.name | baProfilePicture)) }}"></div>
+          <div class="msg-area">
+            <div>{{ msg.text }}</div>
+            <span>{{ msg.time }}</span>
+          </div>
+        </a>
+      </div>
+      <a href>See all messages</a>
+    </div>
+  </li -->
+</ul>

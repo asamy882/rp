@@ -1,0 +1,56 @@
+<form #f="ngForm">
+  <p-growl [(value)]="msgs"></p-growl>
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="seasonId">Season</label>
+      <div class="input-group">
+        <input type="text" class="form-control" style="color: black!important" id="seasonId" name="seasonId" ngModel
+          #seasonId='ngModel' [(ngModel)]="season" required placeholder="Select Branch">
+        <app-periodes on-selectedRowListener="selectSeason($event)"></app-periodes>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <br />
+      <button type="submit" class="btn btn-primary" [disabled]="!enableGet" (click)="getAVGDiscounts()">Get AVG
+        Discounts</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!enableSave" (click)="onSubmit()">Save AVG Discounts</button>
+      <button type="button" *ngIf="viewResult" class="btn btn-primary"  (click)="exportAsXLSX()">Export to Excel</button>
+    </div>
+  </div>
+  <br />
+  <br />
+  <div class="resDiv table-scroll">
+    <div class="scroll-wrapper">
+      <div class="scroll-scroller">
+        <table id="resulttable" class="scroll-table" *ngIf="viewResult">
+          <thead>
+            <tr>
+              <th class="scroll-sticky-col width150">Gender</th>
+              <th class="scroll-sticky-col width150">Line</th>
+              <th class="scroll-sticky-col width150">Item Name</th>
+              <th class="scroll-sticky-col width150">Desc</th>
+              <th class="width150" *ngFor="let m of months">{{ m }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i of planItems;let c = index">
+              <td class="width150 scroll-sticky-col">{{ i.ItemGroup1Name }}</td>
+              <td class="scroll-sticky-col width150">{{ i.ItemGroup2Name }}</td>
+              <td class="scroll-sticky-col width150">{{ i.ItemName }}</td>
+              <td class="scroll-sticky-col width150">{{ i.ItemGroup3Name }}</td>
+              <td class="width150" *ngFor="let m of i.Months">
+                <span style="display: none">{{m.AVGDiscount}}</span>
+                <input type="text" style="color: black!important; width: 100px;" id="month{{ c }}{{ m.AVGDiscountId }}"
+                  name="month{{ c }}{{ m.AVGDiscountId }}" [(ngModel)]="m.AVGDiscount">
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+
+  </div>
+</form>

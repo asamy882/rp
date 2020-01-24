@@ -1,0 +1,47 @@
+<p-growl [(value)]="msgs"></p-growl>
+<NgGrid (clickedAdd)="addClicked()" (clickedDelete)="deleteClicked()" (clickedEdit)="editClicked()" [colDefinition]="colDefs"
+  on-rowSelected="rowSelected($event)" [rowData]="seasons"></NgGrid>
+
+
+<p-dialog [(visible)]="display" modal="modal" [closable]="true" [showHeader]="true">
+  <p-header>
+    Add new season
+  </p-header>
+  <form #seasonForm="ngForm">
+    <div class="row col-sm-12">
+      <div class="col-sm-6">
+        <label for="inputSuccess3">Name</label>
+        <input type="text" [(ngModel)]="season.Name" id="inputSuccess3" (change)="valiadteForm()" class="form-control" style="color: black!important"
+          required name="Name" #name="ngModel">
+      </div>
+      <div class="col-sm-6">
+        <label for="inputSuccess4">Season Type</label>
+        <div class="row ui-g" style="width:250px;margin-bottom:10px">
+          <div class="ui-g-12">
+            <p-radioButton name="group1" value="1" label="Summer" [(ngModel)]="season.SeasonType.Id" inputId="1"></p-radioButton>
+            <p-radioButton name="group1" value="2" label="Winter" [(ngModel)]="season.SeasonType.Id" inputId="2"></p-radioButton>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row col-sm-12">
+      <div class="col-sm-6">
+        <label for="inputSuccess5">From Date</label>
+        <input type="date" [(ngModel)]="season.FromDate" id="inputSuccess5" (change)="valiadteForm()" class="form-control" style="color: black!important"
+          required name="AccountNo" #accountNo="ngModel">
+      </div>
+      <div class="col-sm-6">
+        <label for="inputSuccess2">To Date</label>
+        <input type="date" [(ngModel)]="season.ToDate" id="inputSuccess2" (change)="valiadteForm()" class="form-control" style="color: black!important"
+          required name="ContactPerson" #description="ngModel">
+      </div>
+    </div>
+    <br/>
+    <div class="row">
+      <div class="col-sm-2 offset-sm-8">
+        <button type="button" (click)="onSubmit()" class="btn btn-success" [disabled]="!seasonForm.valid">Save</button>
+      </div>
+    </div>
+  </form>
+
+</p-dialog>

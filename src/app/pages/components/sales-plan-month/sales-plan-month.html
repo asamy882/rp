@@ -1,0 +1,8 @@
+
+    <td class="width150"><input type="text" style="color: black!important; width: 150px;" id="Qty{{ rowData.PlanMonth }}{{ rowDataId }}" name="Qty{{ rowData.PlanMonth }}{{ rowDataId }}"
+      [(ngModel)]="rowData.Qty" (change)="onChange()"></td>
+    <td class="width150"><input type="text" style="color: black!important; width: 150px;" id="dicount{{ rowData.PlanMonth }}{{ rowDataId }}" name="dicount{{ rowData.PlanMonth }}{{ rowDataId }}"
+      [(ngModel)]="rowData.Dicount" (change)="onChange()"></td>
+    <td class="width150">{{ rowData.Dicount > 0 ? (orginalPrice * (100 - rowData.Dicount) / 100) : orginalPrice }}</td>
+    <td class="width150">{{ rowData.Dicount > 0 ? (orginalPrice * (100 - rowData.Dicount) / 100 * rowData.Qty) : orginalPrice * rowData.Qty }}</td>
+ 

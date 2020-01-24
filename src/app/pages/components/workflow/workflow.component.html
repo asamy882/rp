@@ -1,0 +1,21 @@
+<p-growl [(value)]="msgs"></p-growl>
+<ba-card>
+  <div class="row" *ngIf="task.CommentAllowed">
+    <div class="col-lg-6">
+      <label for="txtComment">Comments</label>
+      <div class="input-group">
+        <input type="text" class="form-control" style="color: black!important" class="form-control" id="txtComment" name="txtComment"
+          ngModel #txtComment='ngModel' [(ngModel)]="task.Comments" placeholder="Enter comment">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <button type="button" *ngIf="task.AllowedAction == 4"  icon="fa-reply" class="btn btn-second" (click)="changeRequest()" label="Change Request" value="Change Request">Change Request</button>
+      <button type="button" *ngIf="task.AllowedAction == 3 || task.AllowedAction == 4" icon="fa-thumbs-o-up" class="btn btn-primary" (click)="approve()" label="Approve" value="Approve">Approve</button>
+      <button type="button" *ngIf="task.AllowedAction == 2" icon="fa-thumbs-o-up" class="btn btn-primary" (click)="reviewed()" label="OK" value="OK">OK</button>
+      <button type="button" *ngIf="task.AllowedAction == 3 || task.AllowedAction == 4" icon="fa-close" class="btn btn-danger" (click)="reject()" label="Reject" value="Reject">Reject</button>
+    </div>
+  </div>
+
+</ba-card>

@@ -1,0 +1,140 @@
+<p-growl [(value)]="msgs"></p-growl>
+<p-confirmDialog></p-confirmDialog>
+<p-dataTable #dt [value]="prePurchaseOrders" selectionMode="single" [(selection)]="selectedOrder" expandableRows="true" [rows]="5"
+  [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15,20]" reflow="true">
+  <p-header>
+    <button (click)="filterClicked()" pButton icon="fa-filter"></button>
+  </p-header>
+  <p-column expander="true" styleClass="col-icon" [style]="{'width':'3%'}"></p-column>
+  <p-column field="OrderNo" header="Request No" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+  <p-column field="Season.Name" header="Season" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+  <p-column field="OrderDate" header="Request Date" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+  <p-column field="Status.Name" header="Status" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+  <p-column styleClass="col-button" [style]="{'width':'8%'}">
+    <ng-template pTemplate="header">
+
+    </ng-template>
+    <ng-template let-order="rowData" pTemplate="body">
+      <button type="button" pButton (click)="editOrder(order)" icon="fa-edit"></button>
+      <button type="button" pButton (click)="deleteOrder(order)" icon="fa-trash"></button>
+    </ng-template>
+  </p-column>
+  <ng-template let-order pTemplate="rowexpansion">
+    <p-tabView>
+      <p-tabPanel header="Header">
+        <div class="ui-grid ui-grid-responsive ui-fluid" style="font-size:16px;padding:20px">
+          <div class="ui-grid-row">
+            <div class="ui-grid-col-9">
+              <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                <div class="ui-grid-row">
+                  <div class="ui-grid-col-4 label">Request No: </div>
+                  <div class="ui-grid-col-10">{{order.OrderNo}}</div>
+                </div>
+                <div class="ui-grid-row">
+                  <div class="ui-grid-col-4 label">Season: </div>
+                  <div class="ui-grid-col-10">{{order.Season.Name}}</div>
+                </div>
+                <div class="ui-grid-row">
+                  <div class="ui-grid-col-4 label">Request Date: </div>
+                  <div class="ui-grid-col-10">{{order.OrderDate}}</div>
+                </div>
+                <div class="ui-grid-row">
+                  <div class="ui-grid-col-4 label">Status: </div>
+                  <div class="ui-grid-col-10">{{order.Status.Name}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+      <p-tabPanel header="Items">
+        <p-dataTable [value]="order.Items" expandableRows="true" [rows]="5" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15,20]"
+          reflow="true">
+          <p-header>
+            <button (click)="filterItemsClicked()" pButton icon="fa-filter"></button>
+          </p-header>
+          <p-column expander="true" styleClass="col-icon" [style]="{'width':'3%'}"></p-column>
+          <p-column field="StyleDefinition.StyleNumber" header="Item Code" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+          <p-column field="StyleDefinition.ItemName" header="Item Name" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+          <p-column field="Color.Name" header="Color" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+          <p-column field="Size.Name" header="Size" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+          <p-column field="Quantity" header="QTY" [style]="{'width':'10%'}" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+          <p-column field="FXPrice" header="Unit Price" [style]="{'width':'10%'}" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+          <p-column field="FXAmount" header="FX Amount" [style]="{'width':'12%'}" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+          <p-column field="Currency.CurrencyName" header="Currency" [style]="{'width':'10%'}" [sortable]="true" [filter]="isItemsFilter"
+            filterMatchMode="contains"></p-column>
+          <ng-template let-item pTemplate="rowexpansion">
+            <div class="ui-grid ui-grid-responsive ui-fluid" style="font-size:16px;padding:20px">
+              <div class="ui-grid-row">
+                <div class="ui-grid-col-9">
+                  <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                    <div class="ui-grid-row">
+                      <div class="ui-grid-col-4 label">Vendor: </div>
+                      <div class="ui-grid-col-4">{{item.Vendor.Name}}</div>
+                      <div class="ui-grid-col-4 label">COO: </div>
+                      <div class="ui-grid-col-4">{{item.COO.Name}}</div>
+                    </div>
+                    <div class="ui-grid-row">
+                      <div class="ui-grid-col-4 label">Gender: </div>
+                      <div class="ui-grid-col-4">{{item.StyleDefinition.ItemGroup1.Name}}</div>
+                      <div class="ui-grid-col-4 label">Item Code: </div>
+                      <div class="ui-grid-col-4">{{item.StyleDefinition.StyleNumber}}</div>
+                    </div>
+                    <div class="ui-grid-row">
+                      <div class="ui-grid-col-4 label">Description: </div>
+                      <div class="ui-grid-col-4">{{item.StyleDefinition.ItemGroup3.Name}}</div>
+                      <div class="ui-grid-col-4 label">Item Name: </div>
+                      <div class="ui-grid-col-4">{{item.ItemName}}</div>
+                    </div>
+                    <div class="ui-grid-row">
+                      <div class="ui-grid-col-4 label">Color: </div>
+                      <div class="ui-grid-col-4">{{item.Color.Code}} - {{item.Color.Name}}</div>
+                      <div class="ui-grid-col-4 label">QTY: </div>
+                      <div class="ui-grid-col-4">{{item.Quantity}}</div>
+                    </div>
+                    <div class="ui-grid-row">
+                      <div class="ui-grid-col-4 label">Size: </div>
+                      <div class="ui-grid-col-4">{{item.Size.Code}} - {{item.Size.Name}}</div>
+                      <div class="ui-grid-col-4 label">Unit Price: </div>
+                      <div class="ui-grid-col-4">{{item.FXPrice}}</div>
+                    </div>
+                    <div class="ui-grid-row">
+                      <div class="ui-grid-col-4 label">Currency: </div>
+                      <div class="ui-grid-col-4">{{item.Currency.CurrencyName}}</div>
+                      <div class="ui-grid-col-4 label">FX Amount: </div>
+                      <div class="ui-grid-col-4">{{item.FXAmount.toLocaleString('en-us', {minimumFractionDigits: 2})}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </p-dataTable>
+      </p-tabPanel>
+      <p-tabPanel header="Total">
+        <div class="ui-grid ui-grid-responsive ui-fluid" style="font-size:16px;padding:20px">
+          <div class="ui-grid-row">
+            <div class="ui-grid-col-9">
+              <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                <div class="ui-grid-row">
+                  <div class="ui-grid-col-4 label">Total Quantity: </div>
+                  <div class="ui-grid-col-10">{{order.TotalQuantity}}</div>
+                </div>
+                <div class="ui-grid-row">
+                  <div class="ui-grid-col-4 label">Total Amount: </div>
+                  <div class="ui-grid-col-10">{{order.TotalAmount.toLocaleString('en-us', {minimumFractionDigits: 2})}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+    </p-tabView>
+  </ng-template>
+  <p-footer>
+    <div class="ui-helper-clearfix" style="width:100%">
+      <button type="button" pButton icon="fa-plus" style="float:left" (click)="addNewOrder()" label="Add New Order" value="Add New Order"></button>
+      <button type="button" pButton icon="fa-file-o" iconPos="left" label="Export Data" (click)="dt.exportCSV()" style="float:right"></button>
+    </div>
+  </p-footer>
+</p-dataTable>

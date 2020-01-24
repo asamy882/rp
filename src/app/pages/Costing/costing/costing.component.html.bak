@@ -1,0 +1,276 @@
+<p-growl [(value)]="msgs"></p-growl>
+<p-confirmDialog></p-confirmDialog>
+<ba-card cardTitle="Costing">
+  <form #costingForm="ngForm">
+    <div class="row">
+      <div class="col-sm-6">
+        <label for="cogsName">COGS Name</label>
+        <div class="input-group">
+          <input type="text" class="form-control" style="color: black!important" class="form-control" id="cogsName" name="cogsName"
+            [(ngModel)]="costing.CostingName" ngModel #COGSName='ngModel' required placeholder="Enter COGS Name">
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <label for="costingDate">Costing Date</label>
+        <input type="date" class="form-control" style="color: black!important" [(ngModel)]="costing.CostingDate" id="costingDate"
+          name="costingdate" ngModel #costingdate='ngModel' required>
+      </div>
+    </div>
+  </form>
+</ba-card>
+<ba-card cardTitle="Shipment">
+  <div class="row">
+    <div class="col-sm-12">
+      <ba-card cardTitle="Selected Shipments">
+        <label>
+          <h3 style=" text-align: center;">Select Shipment :</h3>
+        </label>
+        <app-shipmentsForCosting on-selectedRowListener="selectShipments($event)"></app-shipmentsForCosting>
+        <p-dataTable #dt [value]="costing.Shipments" expandableRows="true" [paginator]="true" rows="15" [responsive]="true">
+          <p-header>
+            <button (click)="filterShipmentsClicked()" pButton icon="fa-filter"></button>
+          </p-header>
+          <p-column expander="true" styleClass="col-icon" [style]="{'width':'3%'}"></p-column>
+          <p-column field="ShipmentNo" header="Shipment No" [sortable]="true" [filter]="isShipmentsFilter" filterMatchMode="contains"></p-column>
+          <p-column field="ShipmentDate" header="Shipment Date" [sortable]="true" [filter]="isShipmentsFilter" filterMatchMode="contains"></p-column>
+          <p-column field="ShipmentFrom.Name" header="From" [sortable]="true" [filter]="isShipmentsFilter" filterMatchMode="contains"></p-column>
+          <p-column field="ShipmentTo.Name" header="To" [sortable]="true" [filter]="isShipmentsFilter" filterMatchMode="contains"></p-column>
+          <p-column field="Status.Name" header="Status" [sortable]="true" [filter]="isShipmentsFilter" filterMatchMode="contains"></p-column>
+          <p-column styleClass="col-button" [style]="{'width':'8%'}">
+            <ng-template pTemplate="header">
+
+            </ng-template>
+            <ng-template let-shipment="rowData" pTemplate="body">
+              <button type="button" pButton (click)="deleteShipment(shipment)" icon="fa-trash"></button>
+            </ng-template>
+          </p-column>
+
+          <ng-template let-shipment pTemplate="rowexpansion">
+            <p-tabView>
+              <p-tabPanel header="Header">
+                <div class="ui-grid ui-grid-responsive ui-fluid" style="font-size:16px;padding:20px">
+                  <div class="ui-grid-row">
+                    <div class="ui-grid-col-9">
+                      <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                        <div class="ui-grid-row">
+                          <div class="ui-grid-col-3 label">Shipment No: </div>
+                          <div class="ui-grid-col-4">{{shipment.ShipmentNo}}</div>
+                          <div class="ui-grid-col-3 label">Shipment Date: </div>
+                          <div class="ui-grid-col-4">{{shipment.ShipmentDate}}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                          <div class="ui-grid-col-3 label">Total QTY: </div>
+                          <div class="ui-grid-col-4">{{shipment.TotalQTY}}</div>
+                          <div class="ui-grid-col-3 label">Total Amount: </div>
+                          <div class="ui-grid-col-4">{{shipment.TotalAmount}}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                          <div class="ui-grid-col-3 label">Season: </div>
+                          <div class="ui-grid-col-4">{{shipment.Season}}</div>
+                          <div class="ui-grid-col-3 label">Clearance: </div>
+                          <div class="ui-grid-col-4">{{shipment.Clearance.Name}}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                          <div class="ui-grid-col-3 label">Port Of Loading: </div>
+                          <div class="ui-grid-col-4">{{shipment.PortofLoading.Name}}</div>
+                          <div class="ui-grid-col-3 label">Port Of Discharge: </div>
+                          <div class="ui-grid-col-4">{{shipment.PortOfDischarge}}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                          <div class="ui-grid-col-3 label">Agreed WH Date: </div>
+                          <div class="ui-grid-col-4">{{shipment.AgreedWHDate}}</div>
+                          <div class="ui-grid-col-3 label">Actual WH Date: </div>
+                          <div class="ui-grid-col-4">{{shipment.ActualWHDate}}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                          <div class="ui-grid-col-3 label">Payment Term: </div>
+                          <div class="ui-grid-col-4">{{shipment.PaymentTerm.Name}}</div>
+                          <div class="ui-grid-col-3 label">Shipping Term: </div>
+                          <div class="ui-grid-col-4">{{shipment.ShippingTerm.Name}}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                          <div class="ui-grid-col-3 label">From: </div>
+                          <div class="ui-grid-col-4">{{shipment.ShipmentFrom.Name}}</div>
+                          <div class="ui-grid-col-3 label">To: </div>
+                          <div class="ui-grid-col-4">{{shipment.ShipmentTo.Name}}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                          <div class="ui-grid-col-3 label">Forwarder: </div>
+                          <div class="ui-grid-col-4">{{shipment.Forwarder.Name}}</div>
+                          <div class="ui-grid-col-3 label">Storage Days Avg: </div>
+                          <div class="ui-grid-col-4">{{shipment.StorageDaysAvg}}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                          <div class="ui-grid-col-3 label">Agreed Shipping Date: </div>
+                          <div class="ui-grid-col-4">{{shipment.AgreedShippingDate}}</div>
+                          <div class="ui-grid-col-3 label">Actual Shipping Date: </div>
+                          <div class="ui-grid-col-4">{{shipment.ActualShippingDate}}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                          <div class="ui-grid-col-3 label">Agreed Arrival Date: </div>
+                          <div class="ui-grid-col-4">{{shipment.AgreedArrivaldDate}}</div>
+                          <div class="ui-grid-col-3 label">Actual Arrival Date: </div>
+                          <div class="ui-grid-col-4">{{shipment.ActualArrivaldDate}}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                          <div class="ui-grid-col-3 label">Storage Fees/Rate: </div>
+                          <div class="ui-grid-col-4">{{shipment.StorageFees}}</div>
+                          <div class="ui-grid-col-3 label">Status: </div>
+                          <div class="ui-grid-col-4">{{shipment.Status.Name}}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </p-tabPanel>
+              <p-tabPanel header="Invoices">
+                <p-dataTable [value]="shipment.ShipmentInvoices" expandableRows="true" [paginator]="true" [rows]="5" [paginator]="true" [pageLinks]="3"
+                  [rowsPerPageOptions]="[5,10,15,20]">
+                  <p-header>
+                    <button (click)="filterIvoicesClicked()" pButton icon="fa-filter"></button>
+                  </p-header>
+                  <p-column expander="true" styleClass="col-icon" [style]="{'width':'3%'}"></p-column>
+                  <p-column field="InvoiceNo" header="Invoice No" [sortable]="true" [filter]="true"></p-column>
+                  <p-column field="InvoiceDate" header="Invoice Date" [sortable]="true" [filter]="true"></p-column>
+                  <p-column field="Shipper.Name" header="Shipper" [sortable]="true" [filter]="true"></p-column>
+                  <p-column field="Priority.Name" header="Priority" [sortable]="true" [filter]="true"></p-column>
+                  <p-column field="Vendor.Name" header="Vendor" [sortable]="true" [filter]="true"></p-column>
+                  <p-column field="OriginCountry.Name" header="Origin Country" [sortable]="true" [filter]="true"></p-column>
+                  <p-column field="Status.Name" header="Status" [sortable]="true" [filter]="true"></p-column>
+
+
+                  <ng-template let-invoice pTemplate="rowexpansion">
+                    <p-tabView>
+                      <p-tabPanel header="Header">
+                        <div class="ui-grid ui-grid-responsive ui-fluid" style="font-size:16px;padding:20px">
+                          <div class="ui-grid-row">
+                            <div class="ui-grid-col-9">
+                              <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                                <div class="ui-grid-row">
+                                  <div class="ui-grid-col-3 label">Invoice No: </div>
+                                  <div class="ui-grid-col-4">{{invoice.InvoiceNo}}</div>
+                                  <div class="ui-grid-col-3 label">InvoiceDate: </div>
+                                  <div class="ui-grid-col-4">{{invoice.InvoiceDate}}</div>
+                                </div>
+                                <div class="ui-grid-row">
+                                  <div class="ui-grid-col-3 label">Shipper: </div>
+                                  <div class="ui-grid-col-4">{{invoice.Shipper.Name}}</div>
+                                  <div class="ui-grid-col-3 label">Priority: </div>
+                                  <div class="ui-grid-col-4">{{invoice.Priority.Name}}</div>
+                                </div>
+                                <div class="ui-grid-row">
+                                  <div class="ui-grid-col-3 label">Vendor: </div>
+                                  <div class="ui-grid-col-4">{{invoice.Vendor.Name}}</div>
+                                  <div class="ui-grid-col-3 label">Origin Country: </div>
+                                  <div class="ui-grid-col-4">{{invoice.OriginCountry.Name}}</div>
+                                </div>
+                                <div class="ui-grid-row">
+                                  <div class="ui-grid-col-3 label">Port Of Loading: </div>
+                                  <div class="ui-grid-col-4">{{invoice.PortofLoading.Name}}</div>
+                                  <div class="ui-grid-col-3 label">Final Destination: </div>
+                                  <div class="ui-grid-col-4">{{invoice.FinalDestination.Name}}</div>
+                                </div>
+                                <div class="ui-grid-row">
+                                  <div class="ui-grid-col-3 label">Payment Term: </div>
+                                  <div class="ui-grid-col-4">{{invoice.PaymentTerm.Name}}</div>
+                                  <div class="ui-grid-col-3 label">Arrival Date: </div>
+                                  <div class="ui-grid-col-4">{{invoice.ArrivalDate}}</div>
+                                </div>
+                                <div class="ui-grid-row">
+                                  <div class="ui-grid-col-3 label">Date Of Finanace: </div>
+                                  <div class="ui-grid-col-4">{{invoice.DateofFinanace}}</div>
+                                  <div class="ui-grid-col-3 label">Payment Status: </div>
+                                  <div class="ui-grid-col-4">{{invoice.PaymentStatus.Name}}</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </p-tabPanel>
+                    </p-tabView>
+                  </ng-template>
+                </p-dataTable>
+              </p-tabPanel>
+              <p-tabPanel header="Expenses">
+                <p-dataTable [value]="shipment.ShipmentExpenses">
+                  <p-column field="Expense.Name" header="Expense"></p-column>
+                  <p-column field="Currency.CurrencyName" header="Currency"></p-column>
+                  <p-column field="AgrredAmount" header="Agreed Amount"></p-column>
+                  <p-column field="ActualAmount" header="Actual Amount"></p-column>
+                </p-dataTable>
+              </p-tabPanel>
+              <p-tabPanel header="Total">
+                <div class="ui-grid ui-grid-responsive ui-fluid" style="font-size:16px;padding:20px">
+                  <div class="ui-grid-row">
+                    <div class="ui-grid-col-9">
+                      <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                        <div class="ui-grid-row">
+                          <div class="ui-grid-col-2 label">Total Quantity: </div>
+                          <div class="ui-grid-col-10">{{shipment.TotalQuantity}}</div>
+                        </div>
+                        <div class="ui-grid-row">
+                          <div class="ui-grid-col-2 label">Total Amount: </div>
+                          <div class="ui-grid-col-10">{{shipment.TotalAmount}}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </p-tabPanel>
+            </p-tabView>
+          </ng-template>
+          <p-footer>
+            <div class="ui-helper-clearfix" style="width:100%">
+              <button type="button" pButton icon="fa-file-o" iconPos="left" label="Export Data" (click)="dt.exportCSV()" style="float:right"></button>
+            </div>
+          </p-footer>
+        </p-dataTable>
+      </ba-card>
+      <ba-card cardTitle="Currency">
+        <div class="row">
+          <div class="col-sm-12">
+            <p-dataTable [value]="costing.CurrencyRates" [editable]="true">
+              <p-column field="Currency.CurrencyName" header="Currency"></p-column>
+              <p-column field="RateAmount" header="Rate Amount" [editable]="true"></p-column>
+            </p-dataTable>
+          </div>
+        </div>
+        <div class="row">
+          <div class=" col-sm-12">
+            <div class="input-group">
+              <input type="button" ngClass="col-sm-4 offset-8" id="calculate" value="Calculate Costing" (click)="calculate()" class="btn btn-primary">
+            </div>
+          </div>
+        </div>
+      </ba-card>
+    </div>
+  </div>
+</ba-card>
+<ba-card cardTitle="Total Calculation">
+  <p-dataTable #cidt [value]="costing.Items" [rows]="5" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15,20]">
+    <p-header>
+      <button (click)="filterItemsClicked()" pButton icon="fa-filter"></button>
+    </p-header>
+    <p-column field="InvoiceNo" header="Ship#" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+    <p-column field="StyleNumber" header="ARTICLE" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+    <p-column field="ItemName" header="Item Name" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+    <p-column field="Quantity" header="Quantity" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+    <p-column field="FXRate" header="FX Rate" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+    <p-column field="FXPrice" header="FX Price" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+    <p-column field="TotalFX" header="Total FX" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+    <p-column field="UnitCost" header="Cost Per Unit" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+    <p-column field="TotalCost" header="Total Cost" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+    <p-footer>
+      <div class="ui-helper-clearfix" style="width:100%">
+        <button type="button" pButton icon="fa-file-o" iconPos="left" label="Export Data" (click)="cidt.exportCSV()" style="float:right"></button>
+      </div>
+    </p-footer>
+  </p-dataTable>
+  <div class="row">
+    <div class=" col-sm-12">
+      <div class="input-group">
+        <input type="button" ngClass="col-sm-4 offset-8" id="Save" value="Save Costing" (click)="onSubmit()" class="btn btn-primary">
+      </div>
+    </div>
+  </div>
+</ba-card>

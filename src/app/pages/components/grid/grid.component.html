@@ -1,0 +1,15 @@
+<p-confirmDialog></p-confirmDialog>
+<ba-card cardTitle="Search">
+  <p-dataTable #dt [(value)]="rowData" selectionMode="single" [(selection)]="item" (onRowSelect)="selectedRow($event)"
+  [rows]="10" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10,20,30,40,50,60,70,80,90,100]">
+    <p-header>
+          <button (click)="addClicked()" class="btn btn-primary"><i class="fa fa-plus"></i></button>
+          <button (click)="editClicked()" class="btn btn-info"><i class="fa fa-pencil"></i></button>
+          <button (click)="deleteClicked()" class="btn btn-danger"><i class=" fa fa-trash"></i></button>
+          <button (click)="filterClicked()" class="btn btn-info"><i class=" fa fa-filter"></i></button>
+          <button (click)="dt.exportCSV()" class="btn btn-primary"><i class="fa fa-file-o"></i></button>
+      </p-header>
+    <p-column *ngFor="let col of colDefinition" [filter]="isFilter" [field]="col.field" filterMatchMode="contains"
+              [header]="col.header"></p-column>
+  </p-dataTable>
+</ba-card>

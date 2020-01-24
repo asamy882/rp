@@ -1,0 +1,69 @@
+<form #f="ngForm">
+  <p-growl [(value)]="msgs"></p-growl>
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="seasonId">Season</label>
+      <div class="input-group">
+        <input type="text" class="form-control" style="color: black!important" id="seasonId" name="seasonId" ngModel #seasonId='ngModel'
+          [(ngModel)]="season.Name" required placeholder="Select Branch">
+        <app-periodes on-selectedRowListener="selectSeason($event)"></app-periodes>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+
+      <button type="submit" *ngIf="!viewMode" class="btn btn-primary" [disabled]="!enableGet" (click)="getOTB()">Get OTB</button>
+      <button type="submit" *ngIf="!viewMode" class="btn btn-primary" [disabled]="!enableSave" (click)="onSubmit()">Save OTB</button>
+      <NgWorkflow *ngIf="viewMode" [taskId]="taskId"></NgWorkflow>
+    </div>
+  </div>
+  <br/>
+
+  <div style="width:100%;overflow:auto;">
+    <table width="100%" class="table table-bordered" *ngIf="viewResult">
+      <thead>
+        <tr>
+          <th>Store</th>
+          <th *ngFor="let rowData of weights">{{rowData.Branch.Name}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Weight</td>
+          <td *ngFor="let rowData of weights">  {{rowData.Weight | number}}%         
+          </td>
+        </tr>
+      </tbody>
+    </table>
+<br/>
+<br/>
+<button type="button" *ngIf="viewResult" class="btn btn-primary"  (click)="exportAsXLSX()">Export to Excel</button>
+      
+<br/>
+    <table id="resulttable" width="100%" class="table table-bordered dynamic-tbl" *ngIf="viewResult">
+      <thead>
+        <tr>
+          <th class="width150">Season</th>
+          <th class="width150">OS</th>
+          <th class="width150">Purchase</th>
+          <th class="width150"> OS+Purchase </th>
+          <th class="width150"> AVG.%(OS+PURCHASE) </th>
+          <th class="width150"> AVG.%(OS) </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rowData of items;let rowindex=index">
+          <td class="width150">{{rowData.Season.Name}}</td>
+          <td class="width150">{{rowData.OS | number}}</td>
+          <td class="width150" *ngIf="rowindex != itemsCount-1">{{rowData.Purchase | number}}</td>
+          <td class="width150" *ngIf="rowindex == itemsCount-1">
+             <input type="text" id="otb{{rowindex }}" name="otb{{rowindex }}" class="width100" [(ngModel)]="rowData.Purchase">
+            <span style="display: none">{{rowData.Purchase | number}}</span></td>
+          <td class="width150">{{rowData.OSPurchase | number}}</td>
+          <td class="width150">{{rowData.OSPurchaseAVG | number }}</td>
+          <td class="width150">{{rowData.OSAVG | number }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

@@ -1,0 +1,142 @@
+<form #f="ngForm">
+  <p-growl [(value)]="msgs"></p-growl>
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="Branch">Branch</label>
+      <div class="input-group">
+        <input type="text" (change)="validateForm()" class="form-control" style="color: black!important" id="Branch"
+          name="Branch" ngModel #Branch='ngModel' [(ngModel)]="branch" required placeholder="Select Branch">
+        <app-branches on-selectedRowListener="selectBranch($event)"></app-branches>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <label for="seasonId">Season</label>
+      <div class="input-group">
+        <input type="text" (change)="validateForm()" class="form-control" style="color: black!important" id="seasonId"
+          name="seasonId" ngModel #seasonId='ngModel' [(ngModel)]="season" required placeholder="Select Branch">
+        <app-periodes on-selectedRowListener="selectSeason($event)"></app-periodes>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <br />
+      <button type="submit" class="btn btn-primary" [disabled]="!enableGet" (click)="getSalesMonths()">Get Slaes Months</button>
+      <button type="submit" class="btn btn-success" [disabled]="!enableSave" (click)="onSubmit()">Save Sales Months</button>
+      <button type="button" *ngIf="viewResult" class="btn btn-primary"  (click)="exportAsXLSX()">Export to Excel</button>
+    </div>
+  </div>
+  <br />
+  <br />
+  <div class="resDiv table-scroll">
+    <div class="scroll-wrapper">
+      <div class="scroll-scroller">
+        <table id="resulttable" class="scroll-table" *ngIf="viewResult">
+          <thead>
+            <tr>
+              <th class="width150 scroll-sticky-col">&nbsp;</th>
+              <ng-container *ngFor="let j of historyTotals">
+                <th class="width900 align-center gray-bg right-border-white" colspan="6">{{j.SalesYear}}</th>
+              </ng-container>
+              <ng-container *ngFor="let pitem of planItems;let itemIndex=index">
+                <th class="width750 align-center orange-bg right-border-white" *ngIf="itemIndex==0 || pitem.PlanYear!=planItems[itemIndex-1].PlanYear"
+                  colspan="5">{{pitem.PlanYear}}</th>
+              </ng-container>
+
+            </tr>
+            <tr>
+              <th class="width150 scroll-sticky-col">Month</th>
+              <ng-container *ngFor="let j of historyTotals">
+                <th class="width150 gray-bg">BP Value</th>
+                <th class="width150 gray-bg">Actual</th>
+                <th class="width150 gray-bg">Achieved</th>
+                <th class="width150 gray-bg">Pcs Sold</th>
+                <th class="width150 gray-bg">Discount</th>
+                <th class="width150 gray-bg right-border-white">Growth</th>
+              </ng-container>
+              <th class="width150 orange-bg">Trend</th>
+              <th class="width150 orange-bg">Trend Growth</th>
+              <th class="width150 orange-bg">BP Value</th>
+              <th class="width150 orange-bg">BP Volume</th>
+              <th class="width150 orange-bg right-border-white">Growth Value</th>
+              <ng-container *ngIf="lastYear!=currentYear">
+                <th class="width150 orange-bg">Trend</th>
+                <th class="width150 orange-bg">Trend Growth</th>
+                <th class="width150 orange-bg">BP Value</th>
+                <th class="width150 orange-bg">BP Volume</th>
+                <th class="width150 orange-bg right-border-white">Growth Value</th>
+              </ng-container>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i of planItems;let c = index">
+              <td class="width150 scroll-sticky-col">{{ getMonth(i.PlanMonth) }}</td>
+              <ng-container *ngFor="let j of i.History">
+                <td class="width150">{{ j.BPValue | number}}</td>
+                <td class="width150">{{ j.Actual | number}}</td>
+                <td class="width150">{{ j.Achieved }}%</td>
+                <td class="width150">{{ j.PcsSold | number}}</td>
+                <td class="width150">{{ j.Discount }}%</td>
+                <td class="width150 right-border-gray">{{ j.Growth }}%</td>
+              </ng-container>
+              <ng-container *ngIf="i.PlanYear==lastYear && lastYear!=currentYear">
+                <td class="width150"></td>
+                <td class="width150"></td>
+                <td class="width150"></td>
+                <td class="width150"></td>
+                <td class="width150"></td>
+                <td class="width150 right-border-gray"></td>
+              </ng-container>
+              <ng-container *ngIf="i.PlanYear!=lastYear && lastYear!=currentYear">
+                <td class="width150"></td>
+                <td class="width150"></td>
+                <td class="width150"></td>
+                <td class="width150"></td>
+                <td class="width150 right-border-gray"></td>
+              </ng-container>
+              <td class="width150">{{ i.Trend | number}}</td>
+              <td class="width150">{{ i.TrendGrowth }} %</td>
+              <td class="width150">
+                <span style="display:none">{{i.BPValue}}</span>
+                <input type="text" style="color: black!important; width: 100px;" id="BPVolume{{ c }}"
+                  (change)="calcTotal()" name="BPVolume{{ c }}" [(ngModel)]="i.BPValue"></td>
+              <td class="width150">{{ i.BPVolume }}</td>
+              <td class="width150 right-border-gray">{{ i.GrowthValue }}%</td>
+              <ng-container *ngIf="i.PlanYear!=currentYear && lastYear!=currentYear">
+                <td class="width150"></td>
+                <td class="width150"></td>
+                <td class="width150"></td>
+                <td class="width150"></td>
+                <td class="width150 right-border-gray"></td>
+              </ng-container>
+            </tr>
+            <tr>
+              <td class="width150 scroll-sticky-col total-th">Total</td>
+              <ng-container *ngFor="let j of historyTotals">
+                <td class="width150 total-td">{{j.TotalBPValue | number}}</td>
+                <td class="width150 total-td">{{j.TotalActual | number}}</td>
+                <td class="width150 total-td">{{((j.TotalActual/j.TotalBPValue)*100).toFixed(0)}}%</td>
+                <td class="width150 total-td">{{j.TotalPcsSold | number}}</td>
+                <td class="width150 total-td"></td>
+                <td class="width150 total-td right-border-white"></td>
+              </ng-container>
+              <ng-container *ngIf="lastYear!=currentYear">
+                  <td class="width150 total-td">{{lastYearTotalTrend | number}}</td>
+                  <td class="width150 total-td"></td>
+                  <td class="width150 total-td">{{lastYearTotalBPValue | number}}</td>
+                  <td class="width150 total-td"></td>
+                  <td class="width150 total-td right-border-white"></td>
+                </ng-container>
+              <td class="width150 total-td">{{totalTrend | number}}</td>
+              <td class="width150 total-td"></td>
+              <td class="width150 total-td">{{totalBPValue | number}}</td>
+              <td class="width150 total-td"></td>
+              <td class="width150 total-td right-border-white"></td>             
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</form>

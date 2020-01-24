@@ -1,0 +1,57 @@
+<p-growl [(value)]="msgs"></p-growl>
+<NgGrid (clickedAdd)="addClicked()" (clickedDelete)="deleteClicked()" (clickedEdit)="editClicked()" [colDefinition]="colDefs"
+  on-rowSelected="rowSelected($event)" [rowData]="forwarders"></NgGrid>
+
+
+<p-dialog [(visible)]="display" modal="modal" [closable]="true" [showHeader]="true">
+  <p-header>
+    Add new forwarder
+  </p-header>
+  <form #forwarderForm="ngForm">
+    <div class="row col-sm-12">
+      <div class="col-sm-6">
+        <label for="inputSuccess1" class="control-label">Forwarder Code</label>
+        <input type="text" class="form-control" (change)="valiadteForm()" style="color: black!important" [(ngModel)]="forwarder.Code"
+          id="inputSuccess1" required name="Code" #code="ngModel">
+      </div>
+      <div class="col-sm-6">
+        <label for="inputSuccess3">Forwarder Name</label>
+        <input type="text" [(ngModel)]="forwarder.Name" id="inputSuccess3" (change)="valiadteForm()" class="form-control" style="color: black!important"
+          required name="Name" #name="ngModel">
+      </div>
+    </div>
+    <div class="row col-sm-12">
+      <div class="col-sm-6">
+        <label for="inputSuccess5">Account No.</label>
+        <input type="text " [(ngModel)]="forwarder.AccountNo" id="inputSuccess5" (change)="valiadteForm()" class="form-control" style="color: black!important"
+          required name="AccountNo" #accountNo="ngModel">
+      </div>
+      <div class="col-sm-6">
+        <label for="inputSuccess2">Contact Person</label>
+        <input type="text" [(ngModel)]="forwarder.ContactPerson" id="inputSuccess2" (change)="valiadteForm()" class="form-control"
+          style="color: black!important" required name="ContactPerson" #description="ngModel">
+      </div>
+    </div>
+    <div class="row col-sm-12">
+      <div class="col-sm-6">
+        <label for="inputSuccess4">Description</label>
+        <input type="text" [(ngModel)]="forwarder.Description" id="inputSuccess4" (change)="valiadteForm()" class="form-control"
+          style="color: black!important" required name="Description" #description="ngModel">
+      </div>
+      <div class="col-sm-6" *ngIf="false">
+        <label for="inputSuccess6">Country of Origin</label>
+        <div class="input-group">
+          <input type="text" [(ngModel)]="forwarder.Country.Name" id="inputSuccess6" class="form-control" style="color: black!important;"
+            required name="Country" #country="ngModel">
+          <app-countries on-selectedRowListener="selectCountry($event)"></app-countries>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 offset-sm-8">
+        <button type="button" (click)="onSubmit()" class="btn btn-success" [disabled]="!canSubmitForwarderForm">Save</button>
+      </div>
+    </div>
+  </form>
+
+</p-dialog>

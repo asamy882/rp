@@ -1,0 +1,12 @@
+<p-dialog [header]="lookupName" [modal]="_modal" [(visible)]="display" [width]="_width" [responsive]="true">
+  <p-dataTable [value]="items" [rows]="10" [paginator]="true" #dt
+                [(selection)]="selectedItem" >
+    <p-header>List of {{lookupName}}</p-header>
+    <p-column [style]="{'width':'38px'}" selectionMode="multiple"></p-column>
+    <p-column *ngFor="let col of colDefinition" [field]="col.field" [header]="col.header" [filter]="true"
+              filterPlaceholder="Search" filterMatchMode="contains"></p-column>
+    <p-footer><button pButton class="fa fa-search" (click)="onSelect()"></button></p-footer>
+
+  </p-dataTable>
+</p-dialog>
+<button class="btn btn-primary" (click)="showDialog()"><i class="fa fa-search"></i></button>

@@ -1,0 +1,41 @@
+<form #f="ngForm">
+  <p-growl [(value)]="msgs"></p-growl>
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="seasonId">Season</label>
+      <div class="input-group">
+        <input type="text" class="form-control" style="color: black!important" id="seasonId" name="seasonId" ngModel #seasonId='ngModel'
+          [(ngModel)]="season.Name" required placeholder="Select Branch">
+        <app-periodes on-selectedRowListener="selectSeason($event)"></app-periodes>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+
+      <button type="submit" *ngIf="!viewMode" class="btn btn-primary" [disabled]="!enableGet" (click)="getOTB()">Get Store OTB</button>
+      <button type="submit" *ngIf="!viewMode" class="btn btn-primary" [disabled]="!enableSave" (click)="onSubmit()">Save Store OTB</button>
+      <button type="button" *ngIf="viewResult" class="btn btn-primary"  (click)="exportAsXLSX()">Export to Excel</button>
+      <NgWorkflow *ngIf="viewMode" [taskId]="taskId"></NgWorkflow>
+    </div>
+  </div>
+  <br/>
+
+  <div style="width:100%;overflow:auto;">
+    <table id="resulttable" width="100%" class="table table-bordered dynamic-tbl" *ngIf="viewResult">
+      <thead>
+        <tr>
+          <th class="width150">Store</th>
+          <th class="width150">Weight</th>
+          <th class="width150">OTB</th>        
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rowData of items;let rowindex=index">
+          <td class="width150">{{rowData.Branch.Name}}</td>
+          <td class="width150">{{rowData.Weight | number}}%</td>        
+          <td class="width150"><input type="text" id="otb{{rowindex }}" name="otb{{rowindex }}" class="width100" [(ngModel)]="rowData.OTB"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

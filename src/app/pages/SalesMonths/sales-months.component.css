@@ -1,0 +1,184 @@
+.input-group-addon, .input-group-btn, .input-group .form-control {
+	display : -webkit-box;
+ }
+
+ table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 0px;
+  text-align: left;
+}
+
+.non-border{
+border:none;
+}
+
+.with-border{
+  border-bottom:1px solid black;
+  }
+
+
+.width150{
+  width: 150px;
+}
+
+.width300{
+  width: 300px;
+}
+
+
+.width450{
+  width: 450px;
+}
+
+.width600{
+  width: 600px;
+}
+
+.width750{
+  width: 750px;
+}
+
+.width900{
+  width: 900px;
+}
+
+.resDiv {
+  width: 100%;
+  overflow: hidden;
+  padding-right: 650px;
+}
+
+
+
+.table {
+  background: #fff;
+  color: #333;
+}
+.table-bordered {
+  border: 1px solid #EBEBEB;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > thead > tr > td {
+  background-color: #F5F5F6;
+  border: 1px solid #e7e7e7;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+  border: 1px solid #e7e7e7;
+}
+.table > thead > tr > th {
+  border-bottom: 1px solid #DDDDDD;
+  vertical-align: bottom;
+}
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+  border-top: 1px solid #e7eaec;
+  line-height: 1.42857;
+  padding: 8px;
+  vertical-align: top;
+}
+
+.scroll-table {
+  border: none;
+
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.scroll-table thead th {
+  background-color: #f7f7f7;
+  border: none;
+  color: #333;
+  padding: 10px;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 2px solid #eee;
+}
+.scroll-table tbody {
+  border: none;
+  border-bottom: solid 1px #eee;
+  color: #333;
+  padding: 10px;
+  white-space: nowrap;
+}
+.scroll-table tbody td {
+  border: none;
+  border-bottom: solid 1px #eee;
+  color: #333;
+  white-space: normal;
+  padding: 5px;
+  line-height: normal;
+  height: 50px;
+}
+
+/* scroll table area  */
+
+.scroll-wrapper {
+  position: relative;
+  background: #fff;
+  overflow: auto;
+  width: 1226px;
+  overflow-x: hidden;
+}
+
+.scroll-top-tbl {
+  width: 1182px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  margin-left: 100px;
+}
+.scroll-top-tbl div {
+  width: 1290px;
+}
+.scroll-scroller {
+  margin-left: 100px;
+  overflow: auto;
+  width: 1118px;
+  border-left: 1px solid #eee;
+
+}
+.scroll-table .scroll-sticky-col {
+  position: absolute;
+  top: auto;
+  width: 149px;
+  border: none;
+}
+.scroll-table .scroll-sticky-col:nth-child(1) {
+  width: 100px !important;
+  left: 0;
+}
+.scroll-table .scroll-sticky-col:nth-child(2) {
+  width: 198px !important;
+  left: 100px;
+}
+.scroll-table .scroll-sticky-col:nth-child(3) {
+  left: 298px;
+}
+.scroll-table .scroll-sticky-col:nth-child(4) {
+  left: 446px;
+  width: 215px;
+}
+.scroll-tbl ,.scroll-tbl table {
+  border: 1px solid #fff;
+}
+.scroll-tit {
+  background: #f7f7f7
+}
+
+.align-center
+{
+  text-align: center !important;
+}
+ .border-header {
+  border: 1px solid black !important;
+ }

@@ -1,0 +1,87 @@
+<form #f="ngForm">
+  <p-growl [(value)]="msgs"></p-growl>
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="costCenter">Cost Center</label>
+      <div class="input-group">
+        <input type="text" (change)="validateForm()" class="form-control" style="color: black!important" id="costCenter" name="costCenter"
+          ngModel #costCenterId='ngModel' [(ngModel)]="CostCenter" required placeholder="Select Cost Center">
+        <app-costCenter on-selectedRowListener="selectCostCenter($event)"></app-costCenter>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <label for="deparmentId">Deparment</label>
+      <div class="input-group">
+        <input type="text" (change)="validateForm()" class="form-control" style="color: black!important" id="deparmentId" name="deparmentId"
+          ngModel #deparmentId='ngModel' [(ngModel)]="criteria.Deparment.Name" required placeholder="Select Deparment">
+        <app-departments on-selectedRowListener="selectDeparment($event)"></app-departments>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="Year">Year</label>
+      <input type="number" class="form-control" (change)="validateForm()" [(ngModel)]="criteria.PlanYear" id="Year" name="Year"
+        ngModel #Year='ngModel' required>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <br/>
+      <button type="submit" class="btn btn-primary" [disabled]="!enableGet" (click)="getOPEXPlan()">Get OPEX Plan</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!enableSave" (click)="onSubmit()">Save OPEX Plan</button>
+      <button type="button" *ngIf="viewResult" class="btn btn-primary"  (click)="exportAsXLSX()">Export to Excel</button>
+    </div>
+  </div>
+  <br/>
+  <br/>
+  <div class="resDiv table-scroll">
+    <div class="scroll-wrapper">
+      <div class="scroll-scroller">
+        <table id="resulttable" class="scroll-table"  *ngIf="viewResult">
+          <thead>
+            <tr>
+              <th class="scroll-sticky-col width150">Account Code</th>
+              <th class="scroll-sticky-col width300" >Account Name</th>
+              <th class="scroll-sticky-col width150">Cost Center</th>
+              <th class="scroll-sticky-col width150">Notes</th>
+              <th class="width150" *ngFor="let m of months">{{ m }}</th>
+              <th class="width300 blue-bg" >Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i of planItems;let c = index">
+              <td class="scroll-sticky-col width150">{{ i.ChartAccount.Code }}</td>
+              <td class="scroll-sticky-col width300">{{ i.ChartAccount.Name }}</td>
+              <td class="scroll-sticky-col width150">{{ i.CostCenter }}</td>
+              <td class="scroll-sticky-col width150"><input type="text" style="color: black!important; width: 200px;" id="Notes{{ c }}" name="Notes{{ c }}" [(ngModel)]="i.Note"></td>
+              <td class="width150" *ngFor="let m of i.ItemMonths">
+                <input type="text" (change)="calculateTotalBudget(c)" style="color: black!important; width: 100px;" id="month{{ c }}{{ m.PlanMonth }}"
+                  name="month{{ c }}{{ m.PlanMonth }}" [(ngModel)]="m.TotalAmount">
+                <span style="display: none">{{m.TotalAmount}}</span>
+                </td>
+              <td class="width300 blue-bg">{{ i.TotalBudget }}</td>
+            </tr>
+
+            <!-- tr *ngFor="let i of planItems;let c = index">
+        <td>{{ c }}</td>
+        <td class="width150">{{ i.ItemGroup1.Name }}</td>
+        <td class="width150">{{ i.ItemGroup3.Name }}</td>
+        <span *ngFor="let m of i.ItemMonths">
+          <td class="width150"><input type="text" style="color: black!important; width: 150px;" id="Qty{{ m.Id }}" name="otb{{ m.Id }}"
+            [(ngModel)]="m.Qty"></td>
+          <td class="width150"><input type="text" style="color: black!important; width: 150px;" id="Qty{{ m.Id }}" name="otb{{ m.Id }}"
+            [(ngModel)]="m.Dicount"></td>
+          <td class="width150">{{ m.Dicount > 0 ? (i.OrginalPrice * (100 - m.Dicount) / 100) : i.OrginalPrice }}</td>
+          <td class="width150">{{ m.Dicount > 0 ? (i.OrginalPrice * (100 - m.Dicount) / 100 * m.Qty) : i.OrginalPrice * m.Qty }}</td>
+        </span>
+
+      </tr-->
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+
+  </div>
+  </form>

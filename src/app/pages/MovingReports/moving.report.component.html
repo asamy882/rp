@@ -1,0 +1,98 @@
+<ba-card>
+  <form #f="ngForm">
+    <p-accordion>
+      <p-accordionTab>
+        <p-header>Search Criteria</p-header>
+        <div class="row  col-sm-12">
+          <div class="col-lg-6">
+            <label for="DateFrom">Date From</label>
+            <input type="date" class="form-control" [(ngModel)]="criteria.DateFrom" id="DateFrom" name="DateFrom" ngModel #DateFrom='ngModel'
+              required>
+          </div>
+          <div class="col-lg-6">
+            <label for="DateTo">Date To</label>
+            <input type="date" class="form-control" [(ngModel)]="criteria.DateTo" id="DateTo" name="DateTo" ngModel #DateTo='ngModel'
+              required>
+          </div>
+        </div>
+        <div class="row col-sm-12">
+          <div class="col-sm-6">
+            <label for="TopN">Top N</label>
+            <input type="number" [(ngModel)]="criteria.TopN" id="TopN" class="form-control" style="color: black!important" required name="TopN"
+              #TopN="ngModel">
+          </div>
+          <div class="col-sm-6">
+            <label for="inputItemGroup1">Gender</label>
+            <div class="input-group">
+              <input type="text" [(ngModel)]="criteria.GroupName1" id="inputItemGroup1" class="form-control" style="color: black!important;"
+                name="inputItemGroup1" #inputItemGroup1="ngModel">
+              <app-gender on-selectedRowListener="selectItemGroup1($event)"></app-gender>
+            </div>
+          </div>
+        </div>
+        <div class="row col-sm-12">
+          <div class="col-sm-6">
+            <label for="inputItemGroup2">Line</label>
+            <div class="input-group">
+              <input type="text" [(ngModel)]="criteria.GroupName2" id="inputItemGroup2" class="form-control" style="color: black!important;"
+                name="inputItemGroup2" #inputItemGroup2="ngModel">
+              <app-line on-selectedRowListener="selectItemGroup2($event)"></app-line>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label for="inputItemGroup3">Description</label>
+            <div class="input-group">
+              <input type="text" [(ngModel)]="criteria.GroupName3" id="inputItemGroup3" class="form-control" style="color: black!important;"
+                name="inputItemGroup3" #inputItemGroup3="ngModel">
+              <app-description on-selectedRowListener="selectItemGroup3($event)"></app-description>
+            </div>
+          </div>
+        </div>
+        <div class="row col-sm-12">
+          <div class="col-sm-6">
+            <label for="inputItemGroup4">Shipment No</label>
+            <div class="input-group">
+              <input type="text" [(ngModel)]="criteria.GroupName4" id="inputItemGroup4" class="form-control" style="color: black!important;"
+                name="inputItemGroup4" #inputItemGroup4="ngModel">
+              <app-shipmentNo on-selectedRowListener="selectItemGroup4($event)"></app-shipmentNo>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label for="inputItemGroup5">Seasons</label>
+            <div class="input-group">
+              <input type="text" [(ngModel)]="criteria.GroupName5" id="inputItemGroup5" class="form-control" style="color: black!important;"
+                name="inputItemGroup5" #inputItemGroup5="ngModel">
+              <app-seasons on-selectedRowListener="selectItemGroup5($event)"></app-seasons>
+            </div>
+          </div>
+        </div>
+        <div class="row col-sm-12">
+            <div class="col-sm-6">
+            <label for="movingType">Moving Type</label>
+            <div class="input-group">
+                  <p-radioButton name="movingType" value="FM" label="Fast Moving" [(ngModel)]="movingType" inputId="opt1"></p-radioButton>
+                  <p-radioButton name="movingType" value="SM" label="Slow Moving" [(ngModel)]="movingType" inputId="opt2"></p-radioButton>
+            </div>
+            </div>
+          </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <br/>
+            <button type="submit" class="btn btn-primary" [disabled]="!f.valid" (click)="search()">Search</button>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+
+  </form>
+  <p-dataGrid [value]="rowData" [paginator]="true" [rows]="20">
+      <ng-template let-i pTemplate="item">
+        <div style="padding:3px" class="ui-g-12 ui-md-3">
+          <p-panel [header]="i.ItemName" [style]="{'text-align':'center'}">
+            <img src="{{i.Item_Photo}}" width="60">
+            <div class="car-detail">{{i.ItemCode}} - {{i.ItemName}}</div>
+          </p-panel>
+        </div>
+      </ng-template>
+    </p-dataGrid>
+</ba-card>

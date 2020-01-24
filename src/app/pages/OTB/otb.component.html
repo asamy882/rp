@@ -1,0 +1,147 @@
+<form #f="ngForm">
+  <p-growl [(value)]="msgs"></p-growl>
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="seasonId">Season</label>
+      <div class="input-group">
+        <input type="text" class="form-control" style="color: black!important" id="seasonId" name="seasonId" ngModel #seasonId='ngModel'
+          [(ngModel)]="season.Name" required placeholder="Select Branch">
+        <app-periodes on-selectedRowListener="selectSeason($event)"></app-periodes>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+
+      <button type="submit" *ngIf="!viewMode" class="btn btn-primary" [disabled]="!enableGet" (click)="getOTB()">Get OTB</button>
+      <button type="submit" *ngIf="!viewMode" class="btn btn-primary" [disabled]="!enableSaveDraft" (click)="onSaveAsDraft()">Save OTB As Draft</button>
+      <button type="submit" *ngIf="!viewMode" class="btn btn-primary" [disabled]="!enableSave" (click)="onSubmit()">Submit OTB</button>
+      <NgWorkflow *ngIf="viewMode" [taskId]="taskId"></NgWorkflow>
+    </div>
+  </div>
+  <br/>
+  <div class="resDiv table-scroll">
+    <div class="scroll-wrapper">
+      <div class="scroll-scroller">
+        <table class="scroll-table">
+          <thead *ngIf="viewResult">
+            <tr>
+              <th class="width150 scroll-sticky-col">&nbsp;</th>
+              <th class="width150 scroll-sticky-col">&nbsp;</th>
+              <th class="width150 scroll-sticky-col">&nbsp;</th>
+              <th class="width150 scroll-sticky-col">&nbsp;</th>
+              <th class="width150" rowspan="2">OH</th>
+              <th class="width150" rowspan="2">Purchased</th>
+              <th class="width150" rowspan="2">AVG.FX</th>
+              <th class="width150" rowspan="2">OS</th>
+              <th class="width150" *ngFor="let m of months" rowspan="2">{{ m }}</th>
+              <th class="width150" rowspan="2">Total</th>
+              <th class="width150" rowspan="2">Sell-Thru</th>
+              <th class="width150" rowspan="2">Remaining</th>
+              <th class="width300" colspan="2">Remaining</th>
+              <th class="width300" colspan="2"> OS </th>
+              <th class="width150" rowspan="2">Purchased</th>
+              <th class="width150" rowspan="2">OS</th>
+              <th class="width150" rowspan="2">EXP.Sales</th>
+              <th class="width300" colspan="2">Remaining</th>
+              <th class="width300" colspan="2">OS</th>
+              <th class="width150" rowspan="2">OS</th>
+              <th class="width150" rowspan="2">EXP.Sales</th>
+              <th class="width150" rowspan="2">Sell-Thru</th>
+              <th class="width150" rowspan="2">Remaining</th>
+              <th class="width150" rowspan="2">OTB</th>
+            </tr>
+            <tr>
+              <th class="width150 scroll-sticky-col">Gender</th>
+              <th class="width150 scroll-sticky-col">Line</th>
+              <th class="width150 scroll-sticky-col">Item Name</th>
+              <th class="width150 scroll-sticky-col">Desc.</th>
+              <th class="width150">Carryovers</th>
+              <th class="width150">Leftovers</th>
+              <th class="width150"> Carryovers</th>
+              <th class="width150"> Leftovers</th>
+              <th class="width150"> Carryovers</th>
+              <th class="width150"> Leftovers</th>
+              <th class="width150"> Carryovers</th>
+              <th class="width150"> Leftovers</th>
+            </tr>
+          </thead>
+          <tbody id="tbody" #tbody>
+
+            <ng-container *ngFor="let gender of items;let genderIndex=index">
+              <ng-container *ngFor="let line of gender.Childs;let lineIndex=index">
+                <ng-container *ngFor="let itemName of line.Childs;let itemNameIndex=index">
+                  <ng-container *ngFor="let description of itemName.Childs;let descriptionIndex=index">
+                    <tr>
+                      <td class='width150 scroll-sticky-col h33'>{{lineIndex==0 && itemNameIndex==0 && descriptionIndex==0? gender.Name:""}}</td>
+                      <td class='width150 scroll-sticky-col h33'>{{itemNameIndex==0 && descriptionIndex==0? line.Name:""}}</td>
+                      <td class='width150 scroll-sticky-col h33'>{{descriptionIndex==0? itemName.Name:""}}</td>
+                      <td class='width150 scroll-sticky-col h33'>{{description.Name}}</td>
+                      <td class='width150'>{{ description.LastYearOnHand }}</td>
+                      <td class='width150'>{{ description.LastYearPurchse }}</td>
+                      <td class='width150'>{{ description.FXAVG }}</td>
+                      <td class='width150'>{{ description.OpenStock }}</td>
+                      <td class='width150 with-border' *ngFor="let itemMonth of description.OTBItemMonths">
+                        {{itemMonth.Volum }}
+                      </td>
+                      <td class='width150'>{{ description.TotalSold }}</td>
+                      <td class='width150'>{{ description.SELLTHRU }}</td>
+                      <td class='width150'>{{ description.OpenStock - description.TotalSold }}</td>
+                      <td class='width150'>{{ description.LastSeasonRemainingCarryovers }}</td>
+                      <td class='width150'>{{ description.LastSeasonRemainingLeftovers }}</td>
+                      <td class='width150'>{{ description.LastSeasonOSCarryover }}</td>
+                      <td class='width150'>{{ description.LastSeasonOSLeftovers }}</td>
+                      <td class='width150'>{{ description.NextSeasonPurchased }}</td>
+                      <td class='width150'>{{ (description.NextSeasonPurchased + description.LastSeasonOSCarryover + description.LastSeasonOSLeftovers) }}</td>
+                      <td class='width150'>{{ description.NextSeasonExpSales }}</td>
+                      <td class='width150'>{{ description.NextSeasonRemainingCarryovers }}</td>
+                      <td class='width150'>{{ description.NextSeasonRemainingLeftovers }}</td>
+                      <td class='width150'>{{ description.NextSeasonOSCarryover }}</td>
+                      <td class='width150'>{{ description.NextSeasonOSLeftovers }}</td>
+                      <td class='width150'>{{ description.NextSeasonOSCarryover + description.NextSeasonOSLeftovers }} </td>
+                      <td class='width150'>{{ description.PlannedSales }}</td>
+                      <td class='width150'>{{ description.NextSELLTHRU }}</td>
+                      <td class='width150'>{{ description.Remaining }}</td>
+                      <td class="width150 with-border">
+                        <input type="text" id="otb{{description.Id }}" name="otb{{ description.Id }}" class="width100" [(ngModel)]="description.OTBQTY"
+                          (change)="otbAmountChanged(genderIndex)">
+                      </td>
+                    </tr>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+              <tr>
+                <td colspan='4' class='scroll-sticky-col-total'>Total {{ gender.Name }}</td>
+                <td class='total-td'>{{ gender.LastYearOnHand }}</td>
+                <td class='total-td'>{{ gender.LastYearPurchse }}</td>
+                <td class='total-td'></td>
+                <td class='total-td'>{{ gender.OpenStock }}</td>
+                <td class='total-td' *ngFor="let m of gender.OTBItemMonths">
+                  {{m}}
+                </td>
+                <td class='total-td'>{{ gender.TotalSold }}</td>
+                <td class='total-td'>&nbsp;</td>
+                <td class='total-td'>{{ gender.OpenStock - gender.TotalSold }}</td>
+                <td class='width150'>{{ gender.LastSeasonRemainingCarryovers }}</td>
+                <td class='width150'>{{ gender.LastSeasonRemainingLeftovers }}</td>
+                <td class='width150'>{{ gender.LastSeasonOSCarryover }}</td>
+                <td class='width150'>{{ gender.LastSeasonOSLeftovers }}</td>
+                <td class='width150'>{{ gender.NextSeasonPurchased }}</td>
+                <td class='width150'>{{ (gender.NextSeasonPurchased + gender.LastSeasonOSCarryover + gender.LastSeasonOSLeftovers) }}</td>
+                <td class='width150'>{{ gender.NextSeasonExpSales }}</td>
+                <td class='width150'>{{ gender.NextSeasonRemainingCarryovers }}</td>
+                <td class='width150'>{{ gender.NextSeasonRemainingLeftovers }}</td>
+                <td class='width150'>{{ gender.NextSeasonOSCarryover }}</td>
+                <td class='width150'>{{ gender.NextSeasonOSLeftovers }}</td>
+                <td class='width150'>{{ gender.NextSeasonOSCarryover + gender.NextSeasonOSLeftovers }} </td>
+                <td class='width150'>{{ gender.PlannedSales }}</td>
+                <td class='width150'>{{ gender.NextSELLTHRU }}</td>
+                <td class='width150'>{{ gender.Remaining }}</td>
+                <td class='total-td'>{{ gender.OTBQTY }}</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

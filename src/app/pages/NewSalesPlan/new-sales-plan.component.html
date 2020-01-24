@@ -1,0 +1,154 @@
+<form #f="ngForm">
+  <p-growl [(value)]="msgs"></p-growl>
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="branchId">Branch</label>
+      <div class="input-group">
+        <input type="text" (change)="validateForm()" class="form-control" style="color: black!important" id="branchId"
+          name="branchId" ngModel #branchId='ngModel' [(ngModel)]="branch" required placeholder="Select Branch">
+        <app-branches on-selectedRowListener="selectBranch($event)"></app-branches>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <label for="seasonId">Season</label>
+      <div class="input-group">
+        <input type="text" (change)="validateForm()" class="form-control" style="color: black!important" id="seasonId"
+          name="seasonId" ngModel #seasonId='ngModel' [(ngModel)]="season" required placeholder="Select Season">
+        <app-periodes on-selectedRowListener="selectSeason($event)"></app-periodes>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <br />
+      <button type="submit" class="btn btn-primary" [disabled]="!enableGet" (click)="getNewSalesPlan()">Get Plan</button>
+      <button type="submit" class="btn btn-success" [disabled]="!enableSave" (click)="onSubmit()">Save Plan</button>
+      <button type="button" *ngIf="viewResult" class="btn btn-primary"  (click)="exportAsXLSX()">Export to Excel</button>
+    </div>
+  </div>
+  <br />
+  <br />
+
+
+  <div class="resDiv table-scroll">
+    <div class="scroll-wrapper">
+      <div class="scroll-scroller">
+        <table class="scroll-table" id="resulttable">
+          <thead *ngIf="viewResult">
+            <tr>
+              <th class="width100 scroll-sticky-col">&nbsp;</th>
+              <th class="width100 scroll-sticky-col">&nbsp;</th>
+              <th class="width100 scroll-sticky-col">&nbsp;</th>
+              <th class="width100 scroll-sticky-col">&nbsp;</th>
+              <th class="width100 fixed-col blue-bg" rowspan="3">Avr. Retail</th>
+              <th class="width200 fixed-col gray-bg" colspan="2" style="text-align: center">Actual</th>
+              <th class="width600 orange-bg right-border-white" style="text-align: center;" *ngFor="let m of months" colspan="6">
+                {{ getMonth(m.Month, m.Year) }}
+              </th>
+            </tr>
+            <tr>
+              <th class="width100 scroll-sticky-col">&nbsp;</th>
+              <th class="width100 scroll-sticky-col">&nbsp;</th>
+              <th class="width100 scroll-sticky-col">&nbsp;</th>
+              <th class="width100 scroll-sticky-col">&nbsp;</th>
+              <th class="width100 fixed-col gray-bg" rowspan="2">Winter Category Weight</th>
+              <th class="width100 fixed-col orange-bg" rowspan="2">Summer Category Weight</th>
+
+              <ng-container *ngFor="let m of months">
+                <th class="width100 right-border-gray" *ngIf="isWinter" rowspan="2">Winter Category Weight</th>
+                <th class="width100 right-border-gray" *ngIf="!isWinter" rowspan="2">Summer Category Weight</th>
+                <th class="width100 right-border-gray" rowspan="2">Avr. Disc</th>
+                <th class="width100 right-border-gray" rowspan="2">Avr. Retail After Discount</th>
+                <th class="width100 right-border-gray">Value Share</th>
+                <th class="width100 right-border-gray">Month F Sales</th>
+                <th class="width100 right-border-white">{{m.MonthFSales}}</th>
+              </ng-container>
+            </tr>
+            <tr>
+              <th class="width100 scroll-sticky-col">Gender</th>
+              <th class="width100 scroll-sticky-col">Line</th>
+              <th class="width100 scroll-sticky-col">Item Name</th>
+              <th class="width100 scroll-sticky-col">Desc.</th>
+              <ng-container *ngFor="let m of months">
+                <th class="width100 right-border">{{m.TotalSharedVal}}</th>
+                <th class="width100 right-border-gray">VOL</th>
+                <th class="width100 right-border">VAL</th>
+              </ng-container>
+            </tr>
+          </thead>
+          <tbody id="tbody" #tbody>
+            <ng-container *ngFor="let gender of planItems;let genderIndex=index;">
+              <ng-container *ngFor="let line of gender.Childs;let lineIndex=index;">
+                <ng-container *ngFor="let description of line.Childs;let descriptionIndex=index;">
+                  <tr>
+                    <td class='width150 scroll-sticky-col'>{{ gender.Name }}</td>
+                    <td class='width150 scroll-sticky-col'>{{ line.Name }}</td>
+                    <td class='width150 scroll-sticky-col'>{{ description.ItemName }}</td>
+                    <td class='width100 scroll-sticky-col'>{{ description.Name }}</td>
+                    <td class='width100 blue-bg'>{{description.AUP}}</td>
+                    <td class='width100 gray-bg'>{{description.SummerWeigth}}%</td>
+                    <td class='width100 orange-bg'>{{description.WinterWeigth}}%</td>
+                    <ng-container *ngFor="let itemMonth of description.Months">
+                      <td class='width100 with-border'>
+                        <span style="display: none">{{itemMonth.LineWeigth}}</span>
+                        <input type="text" id="BPLineWeigth{{genderIndex+'-'+lineIndex+'-'+'-'+descriptionIndex+'-'+itemMonth.PlanMonth}}"
+                          name="BPLineWeigth{{genderIndex+'-'+lineIndex+'-'+'-'+descriptionIndex+'-'+itemMonth.PlanMonth}}"
+                          class="width100" [(ngModel)]="itemMonth.LineWeigth" (change)="bpLineWeigthChanged(genderIndex,lineIndex)"></td>
+                      <td class='width100 with-border right-border-gray'>{{ itemMonth.AVGDisc | number }}%</td>
+                      <td class='width100 with-border '>
+                        {{ (100 - itemMonth.AVGDisc) * description.AUP / 100 | number }}
+                      </td>
+                      <td class='width100 with-border right-border'>
+                        {{itemMonth.ValueShare.toLocaleString('en-us', { minimumFractionDigits: 0 })}}
+                      </td>
+                      <td class='width100 with-border '>
+                        
+                          <span style="display: none">{{itemMonth.Volum}}</span>
+                        <input type="text" id="BPVolum{{genderIndex+'-'+lineIndex+'-'+'-'+descriptionIndex+'-'+itemMonth.PlanMonth}}"
+                          name="BPVolum{{genderIndex+'-'+lineIndex+'-'+'-'+descriptionIndex+'-'+itemMonth.PlanMonth}}"
+                          class="width100" [(ngModel)]="itemMonth.Volum" (change)="bpVolumChanged(genderIndex, lineIndex)">
+                      </td>
+                      <td class='width100 with-border right-border'>
+                        {{itemMonth.Value.toLocaleString('en-us', {minimumFractionDigits: 2 })}}
+                      </td>
+                    </ng-container>
+                  </tr>
+                </ng-container>
+                <tr>
+                  <td colspan='4' class='scroll-sticky-col-total-2'>Total {{ line.Name }}</td>
+                  <td class='total-td-2'>{{line.AUP}}</td>
+                  <td class='total-td-2'>{{ line.SummerWeigth | number }}%</td>
+                  <td class='total-td-2'>{{ line.WinterWeigth | number }}%</td>
+                  <ng-container *ngFor="let itemMonth of line.Months">
+                  <td class='total-td-2'>{{ line.WinterWeigth > 0 ? line.WinterWeigth : line.SummerWeigth | number }}%</td>
+                  <td class='total-td-2'></td>
+                  <td class='total-td-2'></td>
+                  <td class='total-td-2'> {{ itemMonth.ValueShare | number }} </td>
+                  <td class='total-td-2'> {{ itemMonth.Volum | number }} </td>
+                  <td class='total-td-2'> {{ itemMonth.Value.toLocaleString('en-us', { minimumFractionDigits: 2 })}} </td>
+                </ng-container>
+                </tr>
+              </ng-container>
+              <tr>
+                <td colspan='4' class='scroll-sticky-col-total'>Total {{ gender.Name }}</td>
+                <td class='total-td'>{{gender.AUP}}</td>
+                <td class='total-td'>{{ gender.SummerWeigth | number }}%</td>
+                <td class='total-td'>{{ gender.WinterWeigth | number }}%</td>
+                <ng-container *ngFor="let itemMonth of gender.Months">
+                <td class='total-td'>{{ isWinter ? gender.WinterWeigth : gender.SummerWeigth | number }}%</td>
+                <td class='total-td'></td>
+                <td class='total-td'></td>
+                <td class='total-td'> {{ itemMonth.ValueShare | number }} </td>
+                <td class='total-td'> {{ itemMonth.Volum | number }} </td>
+                <td class='total-td'> {{ itemMonth.Value.toLocaleString('en-us', { minimumFractionDigits: 2 })}} </td>
+              </ng-container>
+              </tr>
+            </ng-container>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>

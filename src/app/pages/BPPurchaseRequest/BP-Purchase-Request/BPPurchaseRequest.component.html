@@ -1,0 +1,159 @@
+<p-growl [(value)]="msgs"></p-growl>
+<p-confirmDialog></p-confirmDialog>
+<form #orderf="ngForm">
+
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="txtPeriodName">Season</label>
+      <div class="input-group">
+        <input type="text" disabled="true" class="form-control" style="color: black!important" class="form-control" id="txtPeriodName"
+          name="txtPeriodName" ngModel #txtPeriodName='ngModel' [(ngModel)]="order.Season.Name" placeholder="Select Periode">
+        <app-periodes on-selectedRowListener="selectSeason($event)"></app-periodes>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <label for="txtOrderNo">Purchase Rquest No</label>
+      <input type="text" class="form-control" style="color: black!important" class="form-control" id="txtOrderNo" name="txtOrderNo"
+        disabled="true" [(ngModel)]="order.OrderNo" ngModel #txtOrderNo='ngModel' placeholder="Enter Pre Order No">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="orderDate">Purchase Rquest Date</label>
+      <input type="date" class="form-control" (change)="validateOrderForm()" [(ngModel)]="order.OrderDate" id="orderDate"
+        name="orderDate" ngModel #orderDate='ngModel' required>
+    </div>
+
+  </div>
+  <br />
+  <p-dataTable #dt [value]="order.Items" [paginator]="true" [rows]="10" [paginator]="true" [pageLinks]="3"
+    [rowsPerPageOptions]="[10,15,20,30,50,100]" [responsive]="true">
+    <p-header>
+      <button (click)="filterClicked()" pButton icon="fa-filter"></button>
+    </p-header>
+    <p-column field="ItemName" header="Item Name" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+    <p-column field="ItemGroup1.Name" header="Item Group 1" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+    <p-column field="ItemGroup2.Name" header="Item Group 2" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+    <p-column field="ItemGroup3.Name" header="Item Group 3" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+    <p-column field="Quantity" header="QTY" [style]="{'width':'10%'}" [sortable]="true" [filter]="isItemsFilter"
+      filterMatchMode="contains"></p-column>
+    <p-column field="AvgCostPrice" header="Avg Cost Price" [style]="{'width':'10%'}" [sortable]="true" [filter]="isItemsFilter"
+      filterMatchMode="contains"></p-column>
+    <p-column field="Currency.CurrencyName" header="Currency" [style]="{'width':'10%'}" [sortable]="true" [filter]="isItemsFilter"
+      filterMatchMode="contains"></p-column>
+    <p-column field="Priority.Name" header="Priority" [style]="{'width':'10%'}" [sortable]="true" [filter]="isItemsFilter"
+      filterMatchMode="contains"></p-column>
+    <p-column field="Comments" header="Comments" [sortable]="true" [filter]="isItemsFilter" filterMatchMode="contains"></p-column>
+    <p-column styleClass="col-button" [style]="{'width':'8%'}">
+      <ng-template pTemplate="header">
+
+      </ng-template>
+      <ng-template let-item="rowData" pTemplate="body">
+        <button type="button" pButton (click)="preUpdateItem(item)" icon="fa-edit"></button>
+        <button type="button" pButton (click)="deleteItem(item)" icon="fa-trash"></button>
+      </ng-template>
+    </p-column>
+
+    <p-footer>
+      <div class="ui-helper-clearfix" style="width:100%">
+        <button type="button" pButton icon="fa-plus" style="float:left" (click)="preAddItem()" label="Add New Item"
+          value="Add New Item"></button>
+        <button type="button" pButton icon="fa-file-o" iconPos="left" label="Export Data" (click)="dt.exportCSV()"
+          style="float:right"></button>
+      </div>
+    </p-footer>
+  </p-dataTable>
+  <div class="row">
+    <div class="col-lg-6">
+      <br />
+      <button type="submit" class="btn btn-success" [disabled]="!canSubmitOrderForm" (click)="onSubmit()">Save Request</button>
+    </div>
+  </div>
+
+</form>
+<p-dialog [modal]="_modal" [(visible)]="_display" [width]="_width" [responsive]="true">
+
+  <p-header>Add or edit item</p-header>
+  <form #itemf="ngForm">
+    <div class="row">
+      <div class="col-lg-6">
+        <label for="inputSuccess3">Item Name</label>
+        <input type="text" [(ngModel)]="item.ItemName" id="inputSuccess3" (change)="validateItemForm()" class="form-control"
+          style="color: black!important" required name="Name" #name="ngModel">
+      </div>
+      <div class="col-lg-6">
+        <label for="inputItemGroup1">Item Group 1</label>
+        <div class="input-group">
+          <input type="text" [(ngModel)]="item.ItemGroup1.Name" id="inputItemGroup1" class="form-control" style="color: black!important;"
+            required name="inputItemGroup1" #inputItemGroup1="ngModel">
+          <app-gender on-selectedRowListener="selectItemGroup1($event)"></app-gender>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <label for="inputItemGroup2">Item Group 2</label>
+        <div class="input-group">
+          <input type="text" [(ngModel)]="item.ItemGroup2.Name" id="inputItemGroup2" class="form-control" style="color: black!important;"
+            required name="inputItemGroup2" #inputItemGroup2="ngModel">
+          <app-line on-selectedRowListener="selectItemGroup2($event)"></app-line>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <label for="inputItemGroup3">Item Group 3</label>
+        <div class="input-group">
+          <input type="text" [(ngModel)]="item.ItemGroup3.Name" id="inputItemGroup3" class="form-control" style="color: black!important;"
+            required name="inputItemGroup3" #inputItemGroup3="ngModel">
+          <app-description on-selectedRowListener="selectItemGroup3($event)"></app-description>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <label for="txtQTY">Quantity</label>
+        <input type="text" class="form-control" style="color: black!important" id="txtQTY" name="txtQTY" ngModel
+          #txtQTY='ngModel' [(ngModel)]="item.Quantity" required placeholder="Enter QTY" (change)="validateItemForm()">
+      </div>
+      <div class="col-lg-6">
+        <label for="txtUnitPrice">Avg Cost Price</label>
+        <input type="text" class="form-control" style="color: black!important" id="txtUnitPrice" name="txtUnitPrice"
+          ngModel #txtUnitPrice='ngModel' [(ngModel)]="item.AvgCostPrice" required placeholder="Enter Unit Price"
+          (change)="validateItemForm()">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <label for="txtCurrencyName">Currency</label>
+        <div class="input-group">
+          <input type="text" class="form-control" style="color: black!important" disabled="true" id="txtCurrencyName"
+            name="txtCurrencyName" ngModel #txtCurrencyName='ngModel' [value]="item.Currency.CurrencyName" placeholder="Select Currency">
+          <app-currencies on-selectedRowListener="selectCurrency($event)"></app-currencies>
+
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <label for="txtPriority">Priority</label>
+        <div class="input-group">
+          <input type="text" class="form-control" style="color: black!important" disabled="true" id="txtPriority" name="txtPriority"
+            ngModel #txtPriority='ngModel' [(ngModel)]="item.Priority.Name" placeholder="Select Priority">
+          <app-priorities on-selectedRowListener="selectPriority($event)"></app-priorities>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <label for="txtComments">Comments</label>
+        <textarea rows="3" class="form-control" style="color: black!important" id="txtComments" name="txtComments"
+          ngModel #txtComments='ngModel' [(ngModel)]="item.Comments" placeholder="Enter Comments"></textarea>
+      </div>
+    </div>
+
+    <p-footer>
+      <button type="submit" [disabled]="!canSubmitItemForm" class="btn btn-success" (click)="onSubmitItem()">Save</button>
+      <button type="button" (click)="onCancel()" class="btn btn-second">Cancel</button>
+    </p-footer>
+  </form>
+
+</p-dialog>

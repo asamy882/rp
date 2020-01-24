@@ -1,0 +1,9 @@
+.input-group-addon, .input-group-btn, .input-group .form-control {
+	display : -webkit-box;
+ }
+
+ #grid .ui-datatable-reflow .ui-datatable-data td .ui-column-title {
+  display: inline-block !important;
+  }
+
+

@@ -1,0 +1,26 @@
+<p-dialog header="Purchase Orders" [modal]="_modal" [(visible)]="display" [width]="_width" [responsive]="true">
+  <p-dataTable [value]="items" [paginator]="true" [rows]="5" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,15,20]" [(selection)]="selectedItem" sortField="OrderNo">
+    <p-header>
+        <!-- button (click)="filterClicked()" pButton  icon="fa-filter"></button -->
+        <button class="btn btn-info" (click)="filterClicked()"><i class="fa fa-filter"></i></button>
+    </p-header>
+    <p-column [style]="{'width':'3%'}" selectionMode="multiple" ></p-column>
+    <p-column field="OrderNo" header="Order No" [sortable]="true" [filter]="isFilter" filterMatchMode="contains" ></p-column>
+    <p-column field="StyleDefinition.StyleNumber" header="Item Code" [sortable]="true" [filter]="isFilter" filterMatchMode="contains" ></p-column>
+    <!-- p-column field="StyleDefinition.ItemCode" header="Item Code"  [sortable]="true" [filter]="false" filterMatchMode="contains"></p-column>
+    <p-column field="StyleDefinition.ItemName" header="Item Name"  [sortable]="true" [filter]="false" filterMatchMode="contains"></p-column -->
+    <p-column field="Color.Name" header="Color" [sortable]="true"  [filter]="isFilter" filterMatchMode="contains"></p-column>
+    <p-column field="Size.Name" header="Size" [sortable]="true"  [filter]="isFilter" filterMatchMode="contains"></p-column>
+    <!-- p-column field="Barcode" header="Barcode"  [sortable]="true" [filter]="false" filterMatchMode="contains"></p-column -->
+    <p-column field="Quantity" header="QTY" [style]="{'width':'10%'}" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+    <p-column field="FXPrice" header="Unit Price" [style]="{'width':'10%'}" [sortable]="true" [filter]="isFilter" filterMatchMode="contains"></p-column>
+    <p-column field="FXAmount" header="FX Amount" [style]="{'width':'12%'}" [sortable]="true" [filter]="isFilter" filterMatchMode="contains">
+        <ng-template let-invoice="rowData" pTemplate="body">
+            {{invoice.FXAmount | number}}
+        </ng-template>
+    </p-column>
+    <!-- p-column field="Currency.CurrencyName" header="Currency"></p-column-->
+    <p-footer><div class="ui-helper-clearfix" style="width:100%"><button class="btn btn-primary" style="float:left" (click)="selectItems()"><i class="fa fa-plus"></i></button></div></p-footer>
+</p-dataTable>
+</p-dialog>
+<button class="btn btn-primary" (click)="showDialog()"><i class="fa fa-search"></i></button>

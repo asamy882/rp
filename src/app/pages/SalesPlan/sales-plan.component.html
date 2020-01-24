@@ -1,0 +1,86 @@
+<form #f="ngForm">
+  <p-growl [(value)]="msgs"></p-growl>
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="branchId">Branch</label>
+      <div class="input-group">
+        <input type="text" (change)="validateForm()" class="form-control" style="color: black!important" id="branchId" name="branchId"
+          ngModel #branchId='ngModel' [(ngModel)]="branch" required placeholder="Select Branch">
+        <app-branches on-selectedRowListener="selectBranch($event)"></app-branches>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <label for="seasonId">Season</label>
+      <div class="input-group">
+        <input type="text" (change)="validateForm()" class="form-control" style="color: black!important" id="seasonId" name="seasonId"
+          ngModel #seasonId='ngModel' [(ngModel)]="season" required placeholder="Select Branch">
+        <app-periodes on-selectedRowListener="selectSeason($event)"></app-periodes>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <br/>
+      <button type="submit" class="btn btn-primary" [disabled]="!enableGet" (click)="getSalesPlan()">Get Sales Plan</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!enableSave" (click)="onSubmit()">Save Sales Plan</button>
+    </div>
+  </div>
+  <br/>
+  <br/>
+  <div class="resDiv table-scroll">
+    <div class="scroll-wrapper">
+      <div class="scroll-scroller">
+        <table id="t1" class="scroll-table">
+          <thead *ngIf="viewResult">
+            <tr>
+                <th class="width50 scroll-sticky-col">&nbsp;</th>
+                <th class="width150 scroll-sticky-col">&nbsp;</th>
+                <th class="width150 scroll-sticky-col">&nbsp;</th>
+              <th class="width300" *ngFor="let m of months" colspan="4">{{ m }}</th>
+              <th class="width300 total-th"  colspan="4">Total</th>
+            </tr>
+            <tr>
+                
+              <th class="width50 scroll-sticky-col" >No.</th>
+              <th class="width150 scroll-sticky-col" >Code</th>
+              <th class="width150 scroll-sticky-col" >Description</th>
+                <ng-container *ngFor="let m of months">  
+                  <th class="width150">Qty</th>
+                  <th class="width150">Dicount</th>
+                  <th class="width150">Price</th>
+                  <th class="width150 brd-right">Sales</th>
+                </ng-container>
+                <th class="width150 blue-bg" >Qty</th>
+                <th class="width150 gray-bg" >Dicount</th>
+                <th class="width150 orange-bg">Price</th>
+                <th class="width150 green-bg" >Sales</th>
+              </tr>
+          </thead>
+          <tbody>            
+            <tr *ngFor="let i of planItems;let c = index">
+              <td class="width50 scroll-sticky-col">{{ c + 1 }}</td>
+              <td class="width150 scroll-sticky-col">{{ i.ItemGroup1.Name }}</td>
+              <td class="width150 scroll-sticky-col">{{ i.ItemGroup3.Name }}</td>
+              <ng-container *ngFor="let m of i.ItemMonths;let ind=index">
+                <td class="width100">
+                  <input type="text" class="width100" id="Qty{{ m.PlanMonth }}{{ c }}" name="Qty{{ m.PlanMonth }}{{ c }}" [(ngModel)]="m.Qty"
+                    (change)="onChange(c)"></td>
+                <td class="width100"><input type="text" class="width100" id="dicount{{ m.PlanMonth }}{{ c }}" name="dicount{{ m.PlanMonth }}{{ c }}"
+                    [(ngModel)]="m.Dicount" (change)="onChange(c)"></td>
+                <td class="width150">{{ (m.Dicount > 0 ? (i.OrginalPrice * (100 - m.Dicount) / 100) : i.OrginalPrice).toLocaleString('en-us',
+                  {minimumFractionDigits: 2}) }}</td>
+                <td class="width150 brd-right">{{ (m.Dicount > 0 ? (i.OrginalPrice * (100 - m.Dicount) / 100 * m.Qty) : i.OrginalPrice * m.Qty).toLocaleString('en-us',
+                  {minimumFractionDigits: 2}) }}</td>
+              </ng-container>
+
+              <td class="width150 blue-bg">{{ i.TotalQty }}</td>
+              <td class="width150 gray-bg">{{ i.TotalDiscount.toLocaleString('en-us', {minimumFractionDigits: 2}) }}</td>
+              <td class="width150 orange-bg">{{ i.AVGPrice.toLocaleString('en-us', {minimumFractionDigits: 2}) }}</td>
+              <td class="width150 green-bg">{{ i.TotalSales.toLocaleString('en-us', {minimumFractionDigits: 2}) }}</td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

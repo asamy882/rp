@@ -1,0 +1,51 @@
+<p-growl [(value)]="msgs"></p-growl>
+
+<form #styleForm="ngForm">
+  <ba-card>
+    <div class="row">
+      <div class="col-sm-12">
+        <label>Excel File : </label>
+        <input type="file" #fileImportInput name="File Upload" id="file" /> <button type="button" class="btn btn-primary"
+          (click)="validateExcelSheet()">Validate</button>
+      </div>
+    </div>
+  </ba-card>
+</form>
+<p-accordion multiple="true">
+  <p-accordionTab selected="true" *ngIf="showResult && invalidStyles.length>0">
+    <p-header>Invalid Style Defintion Records</p-header>
+    <div class="alert alert-info">
+      There are ({{invalidStyles.length}}) invalid style definition records
+    </div>
+    <p-dataTable [value]="invalidStyles" expandableRows="true" [rows]="5" [paginator]="true" [pageLinks]="3"
+      [rowsPerPageOptions]="[5,10,15,20]">
+      <p-column *ngFor="let col of colDefs" [filter]="false" [field]="col.field" filterMatchMode="contains" [header]="col.header"></p-column>
+    </p-dataTable>
+  </p-accordionTab>
+  <p-accordionTab selected="true" *ngIf="showResult && existStyles.length>0">
+    <p-header>Existing Style Definition Records</p-header>
+    <div class="alert alert-info">
+      There are ({{existStyles.length}}) style definitions already existing
+    </div>
+    <p-dataTable [value]="existStyles" expandableRows="true" [rows]="5" [paginator]="true" [pageLinks]="3"
+      [rowsPerPageOptions]="[5,10,15,20]">
+      <p-column *ngFor="let col of colDefs" [filter]="false" [field]="col.field" filterMatchMode="contains" [header]="col.header"></p-column>
+    </p-dataTable>
+  </p-accordionTab>
+</p-accordion>
+
+
+<div class="alert alert-info" *ngIf="showResult &&  existStyles.length==0 && invalidStyles.length==0 && validStyles.length>0">
+  There are no issues. All records are valid. You have {{ validStyles.length}} ready to upload
+</div>
+<div class="alert alert-info" *ngIf="showResult && validStyles.length==0">
+  There is no valid style definitions to upload. Please check the excel sheet and fix the issues.
+</div>
+<div class="alert alert-info" *ngIf="showResult && (existStyles.length > 0 || invalidStyles.length > 0 ) && validStyles.length>0">
+  There are {{validStyles.length}} style definition records valid to upload
+</div>
+<div class="row">
+  <div class="col-sm-2 offset-sm-6">
+    <button type="button" *ngIf="showResult && validStyles.length > 0" class="btn btn-primary" (click)="UploadExcelSheet()">Upload</button>
+  </div>
+</div>
